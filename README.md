@@ -1,71 +1,13 @@
-# Project template
-
-A simple template for research project repos. Also check out [data science and
-reproducible science cookie
-cutters](https://github.com/audreyr/cookiecutter#data-science).
-
-## Installation
-
-Run the following
-
-    ./install.sh YOUR_PROJECT_REPO_FOLDER
-
-This script creates the following folders and files. 
-
-1. `libs` for a software library for the project.
-1. `data` for datasets and scripts for downloading datasets.
-1. `exps` for timestamped experiments.
-1. `paper` for manuscripts.
-1. `workflow` for workflow scripts.
-1. `.gitignore` that lists temporary and binary files to ignore (LaTeX, Python, Jupyter, data files, etc. )
-
-## Set up
+# Detectability limit and the stability of solution 
 
 
-### Miniforge
+## Idea 
 
-- [GitHub - conda-forge/miniforge: A conda-forge distribution.](https://github.com/conda-forge/miniforge)
+The eigenvalues of the adjacency matrix is swamped by the bulk of eigenvalues as soon as the network gets sparser. Sooner than what the theoretical detectability limit predicts. But the bulk contains some information, i.e., the bulk distribution is different from that of the random graphs in the detectable regime. That is, the adjacnecy matrix still contains the information about the communities in the spectral regime. 
 
-Miniforge is preferred over conda because Miniforge comes with mamba and conda-forge is the default channel.
+The key idea is to shift attention from the solutions themselves but the stability. We hypothise that the ground-truth solution lies in a smooth basin while the random partition with comparable quality lies in a sharp basin in the landscape of the parameter space.  
+ 
+## Lab note
 
+- [exps/2026-02-27-equivalence][exps/2026-02-27-equivalence]. A note about the equivalence between the MLE of the SBM and the eigenvalue problem of the adjacency matrix.  
 
-### Setting up the virtual environment 
-
-First create a virtual environment for the project.
-
-    mamba create -n project_env_name python=3.7
-    mamba activate project_env_name
-
-Install `ipykernel` for Jupyter and `snakemake` for workflow management. 
-
-    mamba install -y -c bioconda -c conda-forge snakemake ipykernel numpy pandas scipy matplotlib seaborn tqdm austin
-
-Create a kernel for the virtual environment that you can use in Jupyter lab/notebook.
-
-    python -m ipykernel install --user --name project_env_kernel_name
-
-
-### Git pre-commit
-
-```bash
-conda install -y -c conda-forge pre-commit
-pre-commit install
-```
-
-
-### Snakemake setting 
-
-```bash 
-mkdir -p ~/.config/snakemake/default 
-```
-and create `~/.config/snakemake/default/config.yaml`:
-```yaml
-# non-slurm profile defaults
-keep-going: True
-rerun-triggers: mtime
-```
-
-and add the following to .zshrc or .bashrc file
-```bash 
-export SNAKEMAKE_PROFILE=default
-```
