@@ -16,7 +16,7 @@ for fpath in input_files:
     # Extract parameters from filename
     fname = fpath.split("/")[-1]
     params = {}
-    for match in re.finditer(r"(\w+)~([\w.]+)", fname):
+    for match in re.finditer(r"([a-zA-Z]+)~([\d.]+)", fname):
         key, val = match.group(1), match.group(2)
         try:
             val = int(val)
