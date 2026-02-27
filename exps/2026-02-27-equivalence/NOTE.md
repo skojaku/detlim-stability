@@ -51,7 +51,7 @@ $$\alpha \;=\; \log\frac{p}{q} + \log\frac{1-q}{1-p} \;=\; \log\frac{p(1-q)}{q(1
 
 Then the $s_is_j$-dependent contribution per pair is:
 
-$$\frac{s_is_j}{2}\left[\alpha\, A_{ij} + \beta\right]$$
+$$\frac{s_is_j}{2}\left[\alphaA_{ij} + \beta\right]$$
 
 Summing over all pairs:
 
@@ -59,13 +59,13 @@ $$ \log P(A \mid \mathbf{s} ) = C + \frac{1}{2} \sum_{ i < j } s_i s_j \left[\al
 
 where $C$ collects all terms independent of $\mathbf{s}$. In matrix notation:
 
-$$\log P(A\mid\mathbf{s}) = C + \frac{\alpha}{4}\,\mathbf{s}^T A\,\mathbf{s} + \frac{\beta}{4}\,\mathbf{s}^T J\,\mathbf{s}$$
+$$\log P(A\mid\mathbf{s}) = C + \frac{\alpha}{4}\mathbf{s}^T A\mathbf{s} + \frac{\beta}{4}\mathbf{s}^T J\mathbf{s}$$
 
-where $J = \mathbf{1}\mathbf{1}^T - I$ (all-ones matrix minus identity, since we sum over $i \neq j$). Note $\mathbf{s}^T J\,\mathbf{s} = (\mathbf{1}^T\mathbf{s})^2 - n$.
+where $J = \mathbf{1}\mathbf{1}^T - I$ (all-ones matrix minus identity, since we sum over $i \neq j$). Note $\mathbf{s}^T J\mathbf{s} = (\mathbf{1}^T\mathbf{s})^2 - n$.
 
 So the MLE problem is:
 
-$$\hat{\mathbf{s}} = \arg\max_{\mathbf{s}\in\{-1,+1\}^n}\left[\alpha\,\mathbf{s}^T A\,\mathbf{s} + \beta\,(\mathbf{1}^T\mathbf{s})^2\right]$$
+$$\hat{\mathbf{s}} = \arg\max_{\mathbf{s}\in\{-1,+1\}^n}\left[\alpha\mathbf{s}^T A\mathbf{s} + \beta(\mathbf{1}^T\mathbf{s})^2\right]$$
 
 If we impose balanced communities, $\sum_i s_i = 0$, i.e., $\mathbf{s} \perp \mathbf{1}$. Then:
 
@@ -73,7 +73,7 @@ $$(\mathbf{1}^T\mathbf{s})^2 = 0$$
 
 and the MLE reduces to:
 
-$$\hat{\mathbf{s}} = \arg\max_{\substack{\mathbf{s}\in\{-1,+1\}^n \\ \mathbf{s}\perp\mathbf{1}}} \;\mathbf{s}^T A\,\mathbf{s}$$
+$$\hat{\mathbf{s}} = \arg\max_{\substack{\mathbf{s}\in\{-1,+1\}^n \\ \mathbf{s}\perp\mathbf{1}}} \;\mathbf{s}^T A\mathbf{s}$$
 
 The discrete optimization over $\{-1,+1\}^n$ is NP-hard (equivalent to MAX-CUT). Relax:
 
@@ -81,7 +81,7 @@ $$\{-1,+1\}^n \;\longrightarrow\; \{\mathbf{x}\in\mathbb{R}^n : \|\mathbf{x}\|^2
 
 The relaxed problem is:
 
-$$\max_{\substack{\mathbf{x}\in\mathbb{R}^n \\ \|\mathbf{x}\|^2 = n \\ \mathbf{x}\perp\mathbf{1}}} \;\mathbf{x}^T A\,\mathbf{x}$$
+$$\max_{\substack{\mathbf{x}\in\mathbb{R}^n \\ \|\mathbf{x}\|^2 = n \\ \mathbf{x}\perp\mathbf{1}}} \;\mathbf{x}^T A\mathbf{x}$$
 
 By the Rayleigh-Ritz theorem, the solution is:
 
