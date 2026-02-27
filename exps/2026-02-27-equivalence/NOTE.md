@@ -55,7 +55,7 @@ $$\frac{s_is_j}{2}\left[\alpha\, A_{ij} + \beta\right]$$
 
 Summing over all pairs:
 
-$$\log P(A\mid\mathbf{s}) = C + \frac{1}{2}\sum_{i<j} s_i s_j\left[\alpha A_{ij} + \beta\right]$$
+$$ \log P(A \mid \mathbf{s} ) = C + \frac{1}{2} \sum_{ i < j } s_i s_j \left[\alpha A_{ij} + \beta\right] $$
 
 where $C$ collects all terms independent of $\mathbf{s}$. In matrix notation:
 
