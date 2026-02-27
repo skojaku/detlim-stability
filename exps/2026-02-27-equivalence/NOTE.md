@@ -51,7 +51,7 @@ $$\alpha \;=\; \log\frac{p}{q} + \log\frac{1-q}{1-p} \;=\; \log\frac{p(1-q)}{q(1
 
 Then the $s_is_j$-dependent contribution per pair is:
 
-$$\frac{s_is_j}{2}\left[\alphaA_{ij} + \beta\right]$$
+$$\frac{s_is_j}{2}\left[\alpha A_{ij} + \beta\right]$$
 
 Summing over all pairs:
 
