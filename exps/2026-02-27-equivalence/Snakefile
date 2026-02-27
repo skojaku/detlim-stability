@@ -1,0 +1,91 @@
+import numpy as np
+from os.path import join as j
+
+include: "workflow_utils.smk"
+
+# ==========
+# Directories
+# ==========
+PREPROC_DIR = j("data", "preprocessed")
+DERIVED_DIR = j("data", "derived")
+FIG_DIR = "figs"
+
+# ==========
+# Parameters
+# ==========
+net_params = {
+    "n": [3000],
+    "cave": [3, 5,10],
+    "mu": list(np.round(np.arange(0.1, 0.85, 0.05), 2)),
+    "sample": list(range(10)),
+}
+
+net_paramspace = to_paramspace(net_params)
+
+fig_params = {
+    "n": net_params["n"],
+    "cave": net_params["cave"],
+}
+fig_paramspace = to_paramspace(fig_params)
+
+# ==========
+# File patterns
+# ==========
+NET_FILE = j(PREPROC_DIR, f"net_{net_paramspace.wildcard_pattern}.npz")
+NODE_FILE = j(PREPROC_DIR, f"node_{net_paramspace.wildcard_pattern}.npz")
+NMI_FILE = j(DERIVED_DIR, f"nmi_{net_paramspace.wildcard_pattern}.npz")
+COMBINED_NMI_FILE = j(DERIVED_DIR, "combined_nmi_results.csv")
+FIG_NMI_FILE = j(FIG_DIR, f"nmi_vs_mu_{fig_paramspace.wildcard_pattern}.pdf")
+
+# ==========
+# Target rule
+# ==========
+ALL_NMI_FILES = [
+    j(DERIVED_DIR, f"nmi_{p}.npz")
+    for p in net_paramspace.instance_patterns
+]
+
+ALL_FIG_NMI_FILES = [
+    j(FIG_DIR, f"nmi_vs_mu_{p}.pdf")
+    for p in fig_paramspace.instance_patterns
+]
+
+rule all:
+    input:
+        ALL_NMI_FILES,
+        ALL_FIG_NMI_FILES,
+
+# ==========
+# Rules
+# ==========
+rule generate_network:
+    output:
+        net_file=NET_FILE,
+        node_file=NODE_FILE,
+    script:
+        "workflow/generate_network.py"
+
+rule run_algorithms:
+    input:
+        net_file=NET_FILE,
+        node_file=NODE_FILE,
+    output:
+        output_file=NMI_FILE,
+    script:
+        "workflow/run_algorithms.py"
+
+rule combine_nmi_results:
+    input:
+        input_files=ALL_NMI_FILES,
+    output:
+        output_file=COMBINED_NMI_FILE,
+    script:
+        "workflow/combine_nmi_results.py"
+
+rule plot_nmi:
+    input:
+        input_file=COMBINED_NMI_FILE,
+    output:
+        output_file=FIG_NMI_FILE,
+    script:
+        "workflow/plot_nmi.py"
