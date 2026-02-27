@@ -92,3 +92,26 @@ where $\mathbf{v}_2$ is the eigenvector of $A$ corresponding to the largest eige
 In a dense planted SBM, the leading eigenvector of $A$ is approximately $\mathbf{1}/\sqrt{n}$ (corresponding to the mean degree). Therefore $\mathbf{v}_2$ is the **second eigenvector** of $A$, and the community assignment is recovered by:
 
 $$\hat{s}_i = \text{sign}(v_{2,i})$$
+
+## Without the balanced constraint
+
+Without the balanced constraint $\mathbf{s} \perp \mathbf{1}$, the MLE includes the rank-one term:
+
+$$\hat{\mathbf{s}} = \arg\max_{\mathbf{s}\in\{-1,+1\}^n}\left[\alpha\mathbf{s}^T A\mathbf{s} + \beta(\mathbf{1}^T\mathbf{s})^2\right]$$
+
+This is equivalent to maximizing $\mathbf{s}^T M \mathbf{s}$ where $M = \alpha A + \beta \mathbf{1}\mathbf{1}^T$ (ignoring the diagonal correction from $J = \mathbf{1}\mathbf{1}^T - I$, which does not affect the optimization since $\mathbf{s}^T I \mathbf{s} = n$ is constant).
+
+Applying the spherical relaxation, the MLE becomes finding the **leading eigenvector** of $M$. Unlike the balanced case which uses the 2nd eigenvector of $A$, this solver uses the 1st eigenvector of the full likelihood matrix $M$.
+
+The matrix $M$ is dense (due to the $\mathbf{1}\mathbf{1}^T$ term), but we never form it. The matrix-vector product $M\mathbf{x} = \alpha (A\mathbf{x}) + \beta (\mathbf{1}^T\mathbf{x})\mathbf{1}$ costs $O(n + m)$, and we solve the eigenproblem via implicit Lanczos iteration (ARPACK).
+
+## Experiment: NMI comparison
+
+We compare two spectral community detection algorithms as a function of the mixing rate $\mu$:
+
+1. **Standard spectral**: 2nd eigenvector of $A$ (assumes balanced communities)
+2. **SBM likelihood solver**: leading eigenvector of $M = \alpha A + \beta \mathbf{1}\mathbf{1}^T$ (no balance constraint, given true $p$ and $q$)
+
+For each $\mu$, we generate SBM networks with $n$ nodes per community and average degree $c_{\text{avg}}$, run both algorithms, and measure the normalized mutual information (NMI) between the predicted and true community labels.
+
+Since the communities are balanced in our setup ($n_1 = n_2$), the two approaches should be equivalent in theory. The experiment tests whether this equivalence holds in practice across the range of $\mu$ values.
