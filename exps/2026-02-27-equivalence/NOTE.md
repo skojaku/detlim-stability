@@ -81,11 +81,11 @@ $$\{-1,+1\}^n \;\longrightarrow\; \{\mathbf{x}\in\mathbb{R}^n : \|\mathbf{x}\|^2
 
 The relaxed problem is:
 
-$$\max_{\substack{\mathbf{x}\in\mathbb{R}^n \\ \|\mathbf{x}\|^2 = n \\ \mathbf{x}\perp\mathbf{1}}} \;\mathbf{x}^T A\mathbf{x}$$
+$$\max_{\substack{\mathbf{x}\in\mathbb{R}^n \\ \|\mathbf{x}\|^2 = n \\ \mathbf{x}\perp\mathbf{1}}} \mathbf{x}^T A\mathbf{x}$$
 
 By the Rayleigh-Ritz theorem, the solution is:
 
-$$\mathbf{x}^* = \sqrt{n}\;\mathbf{v}_2$$
+$$\mathbf{x}^* = \sqrt{n} \mathbf{v}_2$$
 
 where $\mathbf{v}_2$ is the eigenvector of $A$ corresponding to the largest eigenvalue in the subspace orthogonal to $\mathbf{1}$.
 
