@@ -1,5 +1,8 @@
+import os
 import numpy as np
 from os.path import join as j
+
+CONDA_PYTHON = os.path.join(os.environ.get("CONDA_PREFIX", "/home/skojaku/miniforge3/envs/detlim"), "bin", "python3")
 
 include: "workflow_utils.smk"
 
@@ -28,7 +31,7 @@ fig_params = {
 }
 fig_paramspace = to_paramspace(fig_params)
 
-ALGO_NAMES = ["spectral", "sbm", "bp", "ground_truth"]
+ALGO_NAMES = ["spectral", "sbm", "bp", "flatsbm", "ground_truth"]
 
 # ==========
 # File patterns
@@ -101,6 +104,23 @@ rule run_bp:
         output_file=j(DERIVED_DIR, f"nmi_bp_{net_paramspace.wildcard_pattern}.npz"),
     script:
         "workflow/run_bp.py"
+
+rule run_flatsbm:
+    input:
+        net_file=NET_FILE,
+        node_file=NODE_FILE,
+    output:
+        output_file=j(DERIVED_DIR, f"nmi_flatsbm_{net_paramspace.wildcard_pattern}.npz"),
+    params:
+        python=CONDA_PYTHON,
+    shell:
+        "{params.python} workflow/run_flatsbm.py"
+        " --net-file {input.net_file}"
+        " --node-file {input.node_file}"
+        " --output-file {output.output_file}"
+        " --n {wildcards.n}"
+        " --cave {wildcards.cave}"
+        " --mu {wildcards.mu}"
 
 rule run_ground_truth:
     input:
