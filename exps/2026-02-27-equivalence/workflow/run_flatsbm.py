@@ -38,8 +38,10 @@ if __name__ == "__main__":
     membership = node_data["membership"]
 
     # graph-tool SBM inference (degree-corrected, fixed B=2)
+    N_nodes = A.shape[0]
     rows, cols = A.nonzero()
     graph = gt.Graph(directed=False)
+    graph.add_vertex(N_nodes)
     graph.add_edge_list(np.vstack([rows, cols]).T)
     state = gt.minimize_blockmodel_dl(
         graph,
