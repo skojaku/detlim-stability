@@ -102,8 +102,16 @@ rule run_bp:
         node_file=NODE_FILE,
     output:
         output_file=j(DERIVED_DIR, f"nmi_bp_{net_paramspace.wildcard_pattern}.npz"),
-    script:
-        "workflow/run_bp.py"
+    params:
+        python=CONDA_PYTHON,
+    shell:
+        "{params.python} workflow/run_bp.py"
+        " --net-file {input.net_file}"
+        " --node-file {input.node_file}"
+        " --output-file {output.output_file}"
+        " --n {wildcards.n}"
+        " --cave {wildcards.cave}"
+        " --mu {wildcards.mu}"
 
 rule run_flatsbm:
     input:
