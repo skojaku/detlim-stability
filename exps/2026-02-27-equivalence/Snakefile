@@ -28,20 +28,24 @@ fig_params = {
 }
 fig_paramspace = to_paramspace(fig_params)
 
+ALGO_NAMES = ["spectral", "sbm", "bp", "ground_truth"]
+
 # ==========
 # File patterns
 # ==========
 NET_FILE = j(PREPROC_DIR, f"net_{net_paramspace.wildcard_pattern}.npz")
 NODE_FILE = j(PREPROC_DIR, f"node_{net_paramspace.wildcard_pattern}.npz")
-NMI_FILE = j(DERIVED_DIR, f"nmi_{net_paramspace.wildcard_pattern}.npz")
+NMI_FILE_PATTERN = j(DERIVED_DIR, "nmi_{algo}_" + f"{net_paramspace.wildcard_pattern}.npz")
 COMBINED_NMI_FILE = j(DERIVED_DIR, "combined_nmi_results.csv")
 FIG_NMI_FILE = j(FIG_DIR, f"nmi_vs_mu_{fig_paramspace.wildcard_pattern}.pdf")
+FIG_LOGLIK_FILE = j(FIG_DIR, f"loglik_vs_mu_{fig_paramspace.wildcard_pattern}.pdf")
 
 # ==========
 # Target rule
 # ==========
 ALL_NMI_FILES = [
-    j(DERIVED_DIR, f"nmi_{p}.npz")
+    j(DERIVED_DIR, f"nmi_{algo}_{p}.npz")
+    for algo in ALGO_NAMES
     for p in net_paramspace.instance_patterns
 ]
 
@@ -50,10 +54,16 @@ ALL_FIG_NMI_FILES = [
     for p in fig_paramspace.instance_patterns
 ]
 
+ALL_FIG_LOGLIK_FILES = [
+    j(FIG_DIR, f"loglik_vs_mu_{p}.pdf")
+    for p in fig_paramspace.instance_patterns
+]
+
 rule all:
     input:
         ALL_NMI_FILES,
         ALL_FIG_NMI_FILES,
+        ALL_FIG_LOGLIK_FILES,
 
 # ==========
 # Rules
@@ -65,14 +75,41 @@ rule generate_network:
     script:
         "workflow/generate_network.py"
 
-rule run_algorithms:
+rule run_spectral:
     input:
         net_file=NET_FILE,
         node_file=NODE_FILE,
     output:
-        output_file=NMI_FILE,
+        output_file=j(DERIVED_DIR, f"nmi_spectral_{net_paramspace.wildcard_pattern}.npz"),
     script:
-        "workflow/run_algorithms.py"
+        "workflow/run_spectral.py"
+
+rule run_sbm_solver:
+    input:
+        net_file=NET_FILE,
+        node_file=NODE_FILE,
+    output:
+        output_file=j(DERIVED_DIR, f"nmi_sbm_{net_paramspace.wildcard_pattern}.npz"),
+    script:
+        "workflow/run_sbm_solver.py"
+
+rule run_bp:
+    input:
+        net_file=NET_FILE,
+        node_file=NODE_FILE,
+    output:
+        output_file=j(DERIVED_DIR, f"nmi_bp_{net_paramspace.wildcard_pattern}.npz"),
+    script:
+        "workflow/run_bp.py"
+
+rule run_ground_truth:
+    input:
+        net_file=NET_FILE,
+        node_file=NODE_FILE,
+    output:
+        output_file=j(DERIVED_DIR, f"nmi_ground_truth_{net_paramspace.wildcard_pattern}.npz"),
+    script:
+        "workflow/run_ground_truth.py"
 
 rule combine_nmi_results:
     input:
@@ -89,3 +126,11 @@ rule plot_nmi:
         output_file=FIG_NMI_FILE,
     script:
         "workflow/plot_nmi.py"
+
+rule plot_loglik:
+    input:
+        input_file=COMBINED_NMI_FILE,
+    output:
+        output_file=FIG_LOGLIK_FILE,
+    script:
+        "workflow/plot_loglik.py"

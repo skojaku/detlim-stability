@@ -1,0 +1,3 @@
+[submodule "libs/BeliefPropagation"]
+	path = libs/BeliefPropagation
+	url = https://github.com/skojaku/BeliefPropagation

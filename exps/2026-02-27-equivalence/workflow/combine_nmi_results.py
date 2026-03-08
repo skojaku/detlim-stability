@@ -13,8 +13,14 @@ else:
 
 rows = []
 for fpath in input_files:
-    # Extract parameters from filename
     fname = fpath.split("/")[-1]
+
+    # Parse algorithm name: "nmi_{algo}_{params}.npz"
+    # The algo name is between the first underscore and the first parameter (key~val)
+    m = re.match(r"nmi_([a-zA-Z_]+?)_[a-zA-Z]+~", fname)
+    algo = m.group(1) if m else "unknown"
+
+    # Extract parameters from filename
     params = {}
     for match in re.finditer(r"([a-zA-Z]+)~([\d.]+)", fname):
         key, val = match.group(1), match.group(2)
@@ -28,8 +34,10 @@ for fpath in input_files:
         params[key] = val
 
     data = np.load(fpath)
-    params["nmi_spectral"] = float(data["nmi_spectral"])
-    params["nmi_sbm"] = float(data["nmi_sbm"])
+    params["algo"] = algo
+    params["nmi"] = float(data["nmi"])
+    if "loglik" in data:
+        params["loglik"] = float(data["loglik"])
     rows.append(params)
 
 df = pd.DataFrame(rows)
