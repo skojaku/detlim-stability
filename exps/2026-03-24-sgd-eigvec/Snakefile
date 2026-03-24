@@ -1,0 +1,39 @@
+from os.path import join as j
+
+include: "utils.smk"
+
+# ==========
+# Parameters
+# ==========
+net_params = {
+    "n":    [1000],
+    "cave": [5.0],
+    "mu":   [0.5],
+}
+N_SAMPLES = 30
+DATA_DIR  = "data"
+
+net_paramspace = to_paramspace(net_params)
+
+# ==========
+# File patterns
+# ==========
+NET_DATA = j(DATA_DIR, f"networks_{net_paramspace.wildcard_pattern}.npz")
+
+# ==========
+# Target rule
+# ==========
+rule all:
+    input:
+        expand(NET_DATA, net_paramspace),
+
+rule generate_networks:
+    output:
+        NET_DATA,
+    params:
+        n        = lambda wc: int(wc.n),
+        cave     = lambda wc: float(wc.cave),
+        mu       = lambda wc: float(wc.mu),
+        n_samples= N_SAMPLES,
+    script:
+        "generate_data.py"
