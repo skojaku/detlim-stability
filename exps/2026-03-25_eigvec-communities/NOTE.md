@@ -74,23 +74,24 @@ roughly equally split between communities. Naive combination of higher eigvecs k
 
 **BH eigvec decomposition in adjacency basis**:
 The BH community eigvec u_BH projected onto adjacency eigvecs:
-- v2 (community): |c_2|² = 0.317 (31.7%)
-- v3: |c_3|² = 0.135 (13.5%)
-- v4: |c_4|² = 0.075 (7.5%)
-- v5: |c_5|² = 0.059 (5.9%)
-- Top-20 adj eigvecs explain 80.7% of u_BH power
-- ~19% lives in the spectral bulk (below top-20)
+- v2 (community): |c_2|² ≈ 32% of power
+- v3: |c_3|² ≈ 35% of power
+- v4–v20: ~13% combined
+- spectral bulk (below top-20): ~20%
+- v1 (degree): ~0.06% — essentially ABSENT from u_BH
+
+**Note on earlier decomposition error**: An earlier run reported "25% from v1" — this was a
+bookkeeping error where u1_BH (BH's own degree eigvec, most-negative) was confused with v1_adj.
+The actual u_BH community eigvec has <0.1% overlap with v1_adj.
+
+**v1 is NOT community-predictive**:
+- sign(v1) NMI ≈ 0.0006 (essentially zero)
+- Community means of v1: comm0=-0.00136, comm1=-0.00121 (indistinguishable)
+- D in H(r) absorbs degree structure into the operator — v1 never appears in u_BH
 
 **D acts nearly diagonally on eigvecs**: The degree-correction term D@v_k - d_avg*v_k
 projects almost entirely back onto v_k itself (>97% self-projection, <3% cross-mixing).
 D does NOT mix different adjacency eigenvectors — it scales each independently.
-
-**Why BH community signal is NOT just v2**:
-- u_BH ≈ 0.52*v2 (adj) + 0.50*v1 (adj) + smaller contributions from v3-v20
-- Only 26.7% of u_BH's power comes from v2
-- 25.4% comes from v1 (degree eigvec)
-- Residual after removing v2: f = u_BH - c2*v2 has NMI=0.071 — REAL community signal!
-- This residual is dominated by v1 (adjacency degree vector)
 
 **Degree contamination of v2**:
 - Community explains only 6.7% of v2 variance (R²=0.064)
