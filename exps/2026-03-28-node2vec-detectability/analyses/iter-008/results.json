@@ -1,0 +1,246 @@
+{
+  "task": "Compare sigmoid-transformed NetMF matrix variants against clip(M,0) and node2vec for community detection in SBM near detectability limit",
+  "method": "SVD of matrix variants + KMeans NMI, plus node2vec SGNS baseline; N=2000, mu=[0.35,0.40,0.45,0.50], 15 samples each",
+  "result_summary": "clip_0 NMI at mu=0.40: 0.374\u00b10.051; node2vec: 0.339\u00b10.052; sigmoid_M: 0.384\u00b10.043; sigmoid_minus_half_clipped: 0.377\u00b10.048.",
+  "key_numbers": {
+    "nmi_clip0_mu040": 0.3738135770169108,
+    "nmi_node2vec_mu040": 0.3391357348526044,
+    "nmi_sigmoid_M_mu040": 0.38377538246743076,
+    "nmi_sigmoid_centered_mu040": 0.3845758057747329,
+    "nmi_gradient_weight_mu040": 0.38302716890996275,
+    "nmi_sigmoid_minus_half_clipped_mu040": 0.3768712319379489,
+    "sigmoid_mean_at_very_neg_pmi": 0.0
+  },
+  "nmi_by_method_mu": {
+    "clip_0": {
+      "0.35": {
+        "mean": 0.48777470140382195,
+        "std": 0.03870945306631074
+      },
+      "0.4": {
+        "mean": 0.3738135770169108,
+        "std": 0.05126157705825316
+      },
+      "0.45": {
+        "mean": 0.19182468963670368,
+        "std": 0.060883238555483735
+      },
+      "0.5": {
+        "mean": 0.08238773277219537,
+        "std": 0.06486737626930107
+      }
+    },
+    "sigmoid_M": {
+      "0.35": {
+        "mean": 0.48882579183457225,
+        "std": 0.03478219011123668
+      },
+      "0.4": {
+        "mean": 0.38377538246743076,
+        "std": 0.043153152833511316
+      },
+      "0.45": {
+        "mean": 0.23155421143072102,
+        "std": 0.0403527930122894
+      },
+      "0.5": {
+        "mean": 0.10713110861868363,
+        "std": 0.06329964387935573
+      }
+    },
+    "sigmoid_centered": {
+      "0.35": {
+        "mean": 0.48844469020176046,
+        "std": 0.034122010229640926
+      },
+      "0.4": {
+        "mean": 0.3845758057747329,
+        "std": 0.04343431302566201
+      },
+      "0.45": {
+        "mean": 0.23151432543743816,
+        "std": 0.04084222524780774
+      },
+      "0.5": {
+        "mean": 0.10645795122349068,
+        "std": 0.06460748868533019
+      }
+    },
+    "gradient_weight": {
+      "0.35": {
+        "mean": 0.49007288539719035,
+        "std": 0.03255131514988821
+      },
+      "0.4": {
+        "mean": 0.38302716890996275,
+        "std": 0.04558305868411133
+      },
+      "0.45": {
+        "mean": 0.24032040883101038,
+        "std": 0.03636045419453242
+      },
+      "0.5": {
+        "mean": 0.1186940537846601,
+        "std": 0.0613808665478888
+      }
+    },
+    "sigmoid_minus_half_clipped": {
+      "0.35": {
+        "mean": 0.49098832402294434,
+        "std": 0.03381609079061147
+      },
+      "0.4": {
+        "mean": 0.3768712319379489,
+        "std": 0.04842044484969765
+      },
+      "0.45": {
+        "mean": 0.22951026874190997,
+        "std": 0.04939230466341918
+      },
+      "0.5": {
+        "mean": 0.09664331136236015,
+        "std": 0.05900384495019439
+      }
+    },
+    "node2vec": {
+      "0.35": {
+        "mean": 0.4717272511267451,
+        "std": 0.0398752774056173
+      },
+      "0.4": {
+        "mean": 0.3391357348526044,
+        "std": 0.05175507756392859
+      },
+      "0.45": {
+        "mean": 0.23891889948384065,
+        "std": 0.0479250219471784
+      },
+      "0.5": {
+        "mean": 0.09022137708372267,
+        "std": 0.05516726375489081
+      }
+    }
+  },
+  "singular_values_mu40": {
+    "clip_0": [
+      242.89351582850563,
+      119.15842785218334,
+      103.19072604939711,
+      100.06754743904968,
+      99.61625727155318
+    ],
+    "sigmoid_M": [
+      667.9461633690645,
+      80.91046770576861,
+      57.149098130762496,
+      55.46186685927577,
+      54.997202489830755
+    ],
+    "sigmoid_centered": [
+      337.5714130671911,
+      80.99030808407247,
+      57.169267446483985,
+      55.50538861310153,
+      55.002355152023114
+    ],
+    "gradient_weight": [
+      262.6807552291878,
+      50.89843776002205,
+      36.103338031891,
+      35.62177421562856,
+      34.81809818063547
+    ],
+    "sigmoid_minus_half_clipped": [
+      48.99370150850865,
+      22.41900172929612,
+      18.800989924351597,
+      18.2805549235777,
+      18.1494550055633
+    ],
+    "full_M": [
+      1535.3192355982073,
+      415.05272797162087,
+      294.21876622099376,
+      286.5386623141996,
+      282.56331174313203
+    ]
+  },
+  "eigvec_corr_mu40": {
+    "clip_0": [
+      0.037143612116598126,
+      0.7078726131569703,
+      0.024528476215069005,
+      0.05398453513233571,
+      0.01675268620924935
+    ],
+    "sigmoid_M": [
+      0.1221574682503681,
+      0.7224332408880391,
+      0.06111684705341866,
+      0.008138021793804726,
+      0.04032208793848593
+    ],
+    "sigmoid_centered": [
+      0.10249822751816888,
+      0.7232098400102198,
+      0.06046007330790118,
+      0.008625614750959618,
+      0.04067811357821236
+    ],
+    "gradient_weight": [
+      0.11267939517201017,
+      0.7321792697037179,
+      0.04718790590898184,
+      0.018881268492806857,
+      0.05115590634331721
+    ],
+    "sigmoid_minus_half_clipped": [
+      0.09351786431333751,
+      0.7177696150728153,
+      0.021986072882852786,
+      0.055875194457912745,
+      0.014475599741831465
+    ],
+    "full_M": [
+      0.09463125274463328,
+      0.7138019417385919,
+      0.06832560715612797,
+      0.023335269647302342,
+      0.026871301637133724
+    ]
+  },
+  "sparsity_mu40": {
+    "clip_0": 0.14544995414330036,
+    "sigmoid_M": 1.0,
+    "sigmoid_centered": 0.14544995414330036,
+    "gradient_weight": 0.14544995414330036,
+    "sigmoid_minus_half_clipped": 0.14544995414330036,
+    "full_M": 0.14544995414330036
+  },
+  "figures_created": [
+    "analyses/iter-008/fig_sigmoid_comparison.png"
+  ],
+  "code_used": "\ndef compute_netmf_raw(A_lcc, window=10):\n    P = embcom_utils.to_trans_mat(A_lcc).toarray().astype(np.float64)\n    Ppow = np.zeros_like(P); Pt = np.eye(len(P))\n    for _ in range(window): Pt = Pt @ P; Ppow += Pt\n    Ppow /= window\n    d = np.array(A_lcc.sum(1)).flatten(); vol = d.sum()\n    M_raw = Ppow @ np.diag(vol / np.maximum(d, 1e-12))\n    return np.log(np.maximum(M_raw, 1e-300))\n\ndef sigmoid(x): return 1.0 / (1.0 + np.exp(-np.clip(x, -500, 500)))\n\nvariants = {\n    'clip_0': np.maximum(M_raw, 0),\n    'sigmoid_M': sigmoid(M_raw),\n    'sigmoid_centered': sigmoid(M_raw) - 0.5,\n    'gradient_weight': sigmoid(M_raw) * (1 - sigmoid(M_raw)) * M_raw,\n    'sigmoid_minus_half_clipped': np.maximum(sigmoid(M_raw) - 0.5, 0),\n}\n",
+  "shared_components": [
+    {
+      "name": "make_sbm_lcc",
+      "description": "SBM graph generation (N=2000, cave=5, correct parameterization) with LCC extraction",
+      "output_path": "analyses/iter-008/run_analysis.py",
+      "why_shared": "Same graph generation used across all methods and iterations"
+    },
+    {
+      "name": "compute_netmf_raw",
+      "description": "Raw log PMI NetMF matrix computation (window=10, N=2000)",
+      "output_path": "analyses/iter-008/run_analysis.py",
+      "why_shared": "Same matrix used as input for all SVD-based variants"
+    }
+  ],
+  "next_questions": [
+    "Does gradient_weight outperform clip_0 at any mu? The gradient-weighting focuses on PMI\u22480 pairs which carry maximum signal per the SGNS gradient argument.",
+    "Is sigmoid_minus_half_clipped equivalent to clip_0 in practice? Both zero out negative PMI entries but sigmoid version smooths the boundary.",
+    "At what threshold t does sigmoid_M - t begin to match node2vec? This would reveal the implicit 'effective threshold' in SGNS.",
+    "Does the top singular vector alignment (eigvec_corr) predict NMI more reliably than raw NMI across methods?",
+    "Would a free_netmf (gradient descent factorization, no torch) match node2vec better than SVD variants?"
+  ],
+  "failed_attempts": []
+}

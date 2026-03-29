@@ -1,0 +1,97 @@
+# Standalone Snakemake workflow for exploration: node2vec-detectability
+# Self-contained — not connected to the project's main Snakefile.
+# Run from this directory: snakemake -c<N> [target]
+
+from os.path import join as j
+
+include: "./utils.smk"
+
+# === Config ===
+DATA_DIR = "../data"    # exps/2026-03-28-node2vec-detectability/data/
+
+# === Dataset parameters ===
+NET_PARAMS = {
+    "n":    [2000],
+    "cave": [5.0],
+    "mu":   [0.3, 0.35, 0.4, 0.45, 0.5, 0.52],
+}
+N_SAMPLES = 30
+SAMPLE_IDS = [f"{s:03d}" for s in range(N_SAMPLES)]
+DIM = 64
+
+net_paramspace = to_paramspace(NET_PARAMS)
+
+# === File paths ===
+NETWORK_FILE     = j(DATA_DIR, "networks",  net_paramspace.wildcard_pattern, "sample~{sample}.npz")
+NMI_FILE_BP      = j(DATA_DIR, "baselines", "bp",       f"{net_paramspace.wildcard_pattern}_sample~{{sample}}.csv")
+NMI_FILE_SPECTRAL= j(DATA_DIR, "baselines", "spectral", f"{net_paramspace.wildcard_pattern}_sample~{{sample}}.csv")
+NMI_FILE_NODE2VEC= j(DATA_DIR, "baselines", "node2vec", f"{net_paramspace.wildcard_pattern}_sample~{{sample}}.csv")
+NMI_FILE_N2VEC_MF= j(DATA_DIR, "baselines", "n2vec_mf", f"{net_paramspace.wildcard_pattern}_sample~{{sample}}.csv")
+BASELINES_COMBINED = j(DATA_DIR, "baselines", "nmi_all.csv")
+BASELINES_FIG      = j(DATA_DIR, "figs",      "nmi_vs_mu.png")
+
+# === Includes ===
+include: "rules/generate_networks.smk"
+include: "rules/run_baselines.smk"
+
+# === Parameters ===
+# params_my_analysis = {
+#     "param_a": [1, 2, 3],
+#     "param_b": ["option_x"],
+# }
+# my_paramspace = to_paramspace(params_my_analysis)
+
+# === File paths ===
+# INPUT_FILE = j(DATA_DIR, "{dataset}", "preprocessed", "net.npz")
+# OUTPUT_FILE = j(OUT_DIR, "{dataset}", f"result_{my_paramspace.wildcard_pattern}.csv")
+
+# --- Iteration 1 — 2026-03-28: unconstrained MSE factorization of normalized adjacency ---
+# Finding: n2vec_mf detects community structure well below the limit (NMI~0.60 at mu=0.3)
+# but collapses sharply at mu=0.4. Unconstrained MF shows partial detection (NMI~0.29 at
+# mu=0.3) but also fails above mu=0.4. Spectral fails across all mu values tested.
+# Node2Vec was skipped as too slow (~355s estimated for full sweep).
+ITER_001_OUT = j("../analyses", "iter-001", "results.json")
+
+rule iter_001_unconstrained_factorization:
+    output:
+        output_file = ITER_001_OUT,
+    script:
+        "scripts/iter_001_unconstrained_factorization.py"
+
+
+# --- Iteration 2 — 2026-03-28: BP baseline + log/linear × orthogonal/free factorization of R + node2vec ---
+# Finding: Linear factorization (svd_R, free_R) fails completely (NMI~0.001) across all mu.
+# Log nonlinearity is the critical factor: svd_logR achieves NMI=0.25 at mu=0.3 and 0.023 at
+# mu=0.4. Surprisingly, free_logR (log+free) underperforms svd_logR -- freedom from ortho
+# constraints does NOT help. Node2Vec (N=500) achieves NMI=0.63/0.33/0.10 at mu=0.3/0.4/0.5,
+# substantially outperforming all batch factorizations. Node2Vec's advantage over free_logR
+# (the closest batch approximation to SGNS) is attributed to stochastic gradient noise/implicit
+# regularization, not the log transform or removal of orthogonality constraints.
+# BP (iters=5) confirms SBM setup is correct: NMI=0.56 at mu=0.3, collapses at mu~0.5.
+ITER_002_OUT = j("../analyses", "iter-002", "results.json")
+
+rule iter_002_bp_and_log_factorizations:
+    output:
+        output_file = ITER_002_OUT,
+    script:
+        "scripts/iter_002_bp_and_log_factorizations.py"
+
+
+# === Target ===
+rule all:
+    input:
+        ITER_001_OUT,
+        ITER_002_OUT,
+        rules.baselines_all.input,
+
+
+# === Rules ===
+# rule run_analysis:
+#     input:
+#         input_file = INPUT_FILE,
+#     output:
+#         output_file = OUTPUT_FILE,
+#     params:
+#         param_a = lambda wildcards: wildcards.param_a,
+#     script:
+#         "scripts/run_analysis.py"

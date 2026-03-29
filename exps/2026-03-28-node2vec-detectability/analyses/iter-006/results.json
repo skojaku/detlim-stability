@@ -1,0 +1,215 @@
+{
+  "task": "Confirm and characterize why clipping the NetMF matrix at 0 rescues SVD performance near the SBM detectability limit, matching node2vec NMI. Three sub-analyses: A) 20 samples x 6 mu values confirmation, B) clip threshold sensitivity at mu=0.40, C) eigenvalue structure analysis at mu=0.40.",
+  "method": "SBM N=2000, NetMF window=10, SVD dim=64, KMeans n_clusters=2. Sub-A: node2vec/netmf_clipped/netmf_full/spectral. Sub-B: clip thresholds [1.0, 0.0, -1.0, -2.0, -3.0, None]. Sub-C: TruncatedSVD top-5 eigenvectors correlated with binary labels.",
+  "result_summary": "CONFIRMED: netmf_clipped_svd matches node2vec NMI across all mu. At mu=0.40: node2vec=0.349, clipped=0.365, full=0.314. Clip threshold 0.0 is near-optimal; the full matrix has 85% negative entries. Top eigenvector correlation with labels: full=0.033 vs clipped=0.047.",
+  "key_numbers": {
+    "nmi_by_method_mu": {
+      "node2vec": {
+        "0.3": {
+          "mean": 0.5932184787470846,
+          "std": 0.027632432685747343,
+          "n": 20
+        },
+        "0.35": {
+          "mean": 0.48201889977125234,
+          "std": 0.04158043013907086,
+          "n": 20
+        },
+        "0.4": {
+          "mean": 0.349364295295957,
+          "std": 0.04298320322386712,
+          "n": 20
+        },
+        "0.45": {
+          "mean": 0.17848305970021286,
+          "std": 0.05730902140505353,
+          "n": 20
+        },
+        "0.5": {
+          "mean": 0.062123907099332354,
+          "std": 0.04622183661604031,
+          "n": 20
+        },
+        "0.52": {
+          "mean": 0.03090739274109605,
+          "std": 0.034563725442991695,
+          "n": 20
+        }
+      },
+      "netmf_clipped_svd": {
+        "0.3": {
+          "mean": 0.6107529485223042,
+          "std": 0.028233435345525547,
+          "n": 20
+        },
+        "0.35": {
+          "mean": 0.501978133170423,
+          "std": 0.03784775673631948,
+          "n": 20
+        },
+        "0.4": {
+          "mean": 0.36544098747897913,
+          "std": 0.04455824118948983,
+          "n": 20
+        },
+        "0.45": {
+          "mean": 0.17029200734664002,
+          "std": 0.06443175889135007,
+          "n": 20
+        },
+        "0.5": {
+          "mean": 0.058309235461199226,
+          "std": 0.0465228029976301,
+          "n": 20
+        },
+        "0.52": {
+          "mean": 0.03391598143565118,
+          "std": 0.03577010336599308,
+          "n": 20
+        }
+      },
+      "n2vec_mf_full": {
+        "0.3": {
+          "mean": 0.5466301528070396,
+          "std": 0.18412870442010523,
+          "n": 20
+        },
+        "0.35": {
+          "mean": 0.4238646529382736,
+          "std": 0.1820359572430085,
+          "n": 20
+        },
+        "0.4": {
+          "mean": 0.31374619582123386,
+          "std": 0.1370963595372682,
+          "n": 20
+        },
+        "0.45": {
+          "mean": 0.21025861783124372,
+          "std": 0.058750097929768624,
+          "n": 20
+        },
+        "0.5": {
+          "mean": 0.06865897654809618,
+          "std": 0.05405610175441123,
+          "n": 20
+        },
+        "0.52": {
+          "mean": 0.030943132199547363,
+          "std": 0.03490094326517175,
+          "n": 20
+        }
+      },
+      "spectral": {
+        "0.3": {
+          "mean": 0.1056088710624871,
+          "std": 0.15422186334659713,
+          "n": 20
+        },
+        "0.35": {
+          "mean": 0.06506566521071881,
+          "std": 0.08529299470721752,
+          "n": 20
+        },
+        "0.4": {
+          "mean": 0.02262643094502196,
+          "std": 0.03209573274900001,
+          "n": 20
+        },
+        "0.45": {
+          "mean": 0.007602215902180115,
+          "std": 0.011596492342472297,
+          "n": 20
+        },
+        "0.5": {
+          "mean": 0.005452773446913372,
+          "std": 0.007746765089680529,
+          "n": 20
+        },
+        "0.52": {
+          "mean": 0.0027901796337769765,
+          "std": 0.003200274463314388,
+          "n": 20
+        }
+      }
+    },
+    "nmi_by_clip_threshold": {
+      "1.0": 0.23347632341641272,
+      "0.0": 0.3742023416783506,
+      "-1.0": 0.38901109216705987,
+      "-2.0": 0.38032221842657193,
+      "-3.0": 0.379893862480957,
+      "None": 0.3800440805932526
+    },
+    "nmi_by_clip_threshold_std": {
+      "1.0": 0.1133231942066915,
+      "0.0": 0.06410237822340534,
+      "-1.0": 0.05939517139566598,
+      "-2.0": 0.0556089627279448,
+      "-3.0": 0.05693002214831223,
+      "None": 0.05707653989178772
+    },
+    "eigvec_community_corr": {
+      "full": {
+        "1": 0.033153515360982974,
+        "2": 0.6701437420440197,
+        "3": 0.08495809373383531,
+        "4": 0.04051387195120751,
+        "5": 0.07567069449133677
+      },
+      "clipped": {
+        "1": 0.04727865094942715,
+        "2": 0.6525465348635953,
+        "3": 0.09571215813764879,
+        "4": 0.07946316581460348,
+        "5": 0.0778774524132287
+      }
+    },
+    "eigval_full_top5_mean": [
+      1564.9096494205946,
+      398.8617833919849,
+      301.5565725725667,
+      290.617854690337,
+      280.880043568794
+    ],
+    "eigval_clipped_top5_mean": [
+      241.28170120979604,
+      117.30636066016571,
+      104.30599193488399,
+      102.04796499814151,
+      100.10283032615989
+    ],
+    "frac_negative_full_matrix": 0.8546798110331247,
+    "frac_zero_clipped_matrix": 0.8546798110331247,
+    "n_samples_A": 20,
+    "n_samples_B": 10,
+    "n_samples_C": 5,
+    "N": 2000
+  },
+  "figures_created": [
+    "analyses/iter-006/fig_clipping_analysis.png"
+  ],
+  "code_used": "\n# Core code pattern used throughout:\ndef compute_netmf(A_lcc, window=10, clip=0.0):\n    P = embcom_utils.to_trans_mat(A_lcc)\n    P_dense = P.toarray().astype(np.float64)\n    Ppow = np.zeros_like(P_dense); Pt = np.eye(len(P_dense))\n    for _ in range(window): Pt = Pt @ P_dense; Ppow += Pt\n    Ppow /= window\n    d = np.array(A_lcc.sum(axis=1)).flatten(); vol = d.sum()\n    M_raw = Ppow @ np.diag(vol / np.maximum(d, 1e-12))\n    M_log = np.log(np.maximum(M_raw, 1e-300))\n    if clip is not None: M_log = np.maximum(M_log, clip)\n    return M_log\n\ndef svd_embed(M, dim=64):\n    svd = TruncatedSVD(n_components=min(dim, M.shape[0]-1), random_state=42)\n    return svd.fit_transform(M)\n",
+  "shared_components": [
+    {
+      "name": "make_sbm_lcc",
+      "description": "SBM N=2000 with LCC extraction, parameterized by mu",
+      "output_path": null,
+      "why_shared": "Same graph generation function used across all sub-analyses and iterations"
+    },
+    {
+      "name": "compute_netmf",
+      "description": "NetMF matrix computation with configurable clip threshold",
+      "output_path": null,
+      "why_shared": "Core function for all NetMF-based methods"
+    }
+  ],
+  "next_questions": [
+    "Does the clipping rescue also work for larger N (e.g., N=5000, N=10000)?",
+    "Is the 'community eigenvector' in the clipped matrix the 2nd singular vector (rank 1 after the trivial one)?",
+    "Does the clip threshold optimum shift with mu \u2014 is clip=0 optimal everywhere or only near the detectability limit?",
+    "Could soft-thresholding (e.g., log-max(M, 0) transformed) do even better than hard clipping?",
+    "Why does the full NetMF eigvec1 have near-zero community correlation \u2014 is it dominated by degree effects?"
+  ],
+  "failed_attempts": []
+}

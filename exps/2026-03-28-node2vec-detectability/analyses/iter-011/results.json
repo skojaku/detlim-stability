@@ -1,0 +1,217 @@
+{
+  "task": "Test whether degree normalization is THE essential transferable ingredient, and find the cleanest unified formulation. Sub-A: degree-norm ablation at mu=0.40 (10 samples). Sub-B: best 4 methods full mu sweep (20 samples). Sub-C: SV analysis explaining why raw A fails.",
+  "method": "SBM N=2000 cave=5.0, 10-hop multi-hop averaging, TruncatedSVD+KMeans for NMI, full SVD for singular value analysis",
+  "result_summary": "Sub-A: P_mh_log_clip NMI=0.356, Msym_mh_log_clip=0.370, A_mh_log_clip=0.001 (fails), A_degnorm_post=0.003, A_row_post=0.297, Dsym_post=0.003. Top-5 SVs A_mh=[10712293.9, 1214077.7, 978091.8, 851442.2, 760461.9], P_mh=[1.085, 0.445, 0.438, 0.41, 0.39]. Corr labels A_mh=[np.float64(0.062), np.float64(0.465), np.float64(0.164), np.float64(0.185), np.float64(0.001)], P_mh=[np.float64(0.003), np.float64(0.175), np.float64(0.021), np.float64(0.097), np.float64(0.576)].",
+  "key_numbers": {
+    "nmi_ablation_mu40": {
+      "P_multihop_log_clip": {
+        "mean": 0.3555095599865255,
+        "std": 0.03318517506932959
+      },
+      "Msym_multihop_log_clip": {
+        "mean": 0.37008332789091786,
+        "std": 0.038572271514339784
+      },
+      "A_multihop_log_clip": {
+        "mean": 0.001220669699596636,
+        "std": 0.0013841886154217684
+      },
+      "A_degnorm_then_log_clip": {
+        "mean": 0.002733441677892033,
+        "std": 0.0030376316497751346
+      },
+      "A_row_then_log_clip": {
+        "mean": 0.29736883654642865,
+        "std": 0.03656831837157047
+      },
+      "Dsym_A_log_clip": {
+        "mean": 0.002733441677892033,
+        "std": 0.0030376316497751346
+      }
+    },
+    "sv_ratios_mean_mu40": {
+      "P_multihop_log_clip": 2.054534764806495,
+      "Msym_multihop_log_clip": 2.212020358333146,
+      "A_multihop_log_clip": 155.35167196038213,
+      "A_degnorm_then_log_clip": 63.12384988359776,
+      "A_row_then_log_clip": 2.932272567722314,
+      "Dsym_A_log_clip": 63.12384988359777
+    },
+    "sv_for_scatter_seed0": {
+      "P_multihop_log_clip": {
+        "sv1": 242.01324676621763,
+        "sv2": 118.4224569699292,
+        "ratio": 2.0436431818643284
+      },
+      "Msym_multihop_log_clip": {
+        "sv1": 287.6476736907949,
+        "sv2": 131.04060691633333,
+        "ratio": 2.1951033382686624
+      },
+      "A_multihop_log_clip": {
+        "sv1": 30869.333688524654,
+        "sv2": 200.28160644190373,
+        "ratio": 154.1296489324845
+      },
+      "A_degnorm_then_log_clip": {
+        "sv1": 12594.434960007391,
+        "sv2": 200.27669409053465,
+        "ratio": 62.88517501848769
+      },
+      "A_row_then_log_clip": {
+        "sv1": 303.0645805401503,
+        "sv2": 110.6456676009965,
+        "ratio": 2.7390551036579476
+      },
+      "Dsym_A_log_clip": {
+        "sv1": 12594.434960007391,
+        "sv2": 200.2766940905347,
+        "ratio": 62.88517501848767
+      }
+    },
+    "nmi_comparison_full": {
+      "netmf_clip0": {
+        "0.3": {
+          "mean": 0.5993666113272125,
+          "std": 0.027146172374402595
+        },
+        "0.35": {
+          "mean": 0.4982807103363308,
+          "std": 0.03677784979254871
+        },
+        "0.4": {
+          "mean": 0.3517468488631644,
+          "std": 0.04382400941602655
+        },
+        "0.45": {
+          "mean": 0.2022863917506697,
+          "std": 0.05149629547061516
+        },
+        "0.5": {
+          "mean": 0.07425513128329406,
+          "std": 0.04785710094019739
+        }
+      },
+      "norm_adj_netmf_clip0": {
+        "0.3": {
+          "mean": 0.5991089950712283,
+          "std": 0.025595252218601854
+        },
+        "0.35": {
+          "mean": 0.5021885207488712,
+          "std": 0.035767426749244845
+        },
+        "0.4": {
+          "mean": 0.35887695972983896,
+          "std": 0.04053774689281317
+        },
+        "0.45": {
+          "mean": 0.21381239186985806,
+          "std": 0.05082893537171533
+        },
+        "0.5": {
+          "mean": 0.07301651927216904,
+          "std": 0.05374699830920023
+        }
+      },
+      "norm_adj_netmf_gradweight": {
+        "0.3": {
+          "mean": 0.5947299621360247,
+          "std": 0.025712154680635018
+        },
+        "0.35": {
+          "mean": 0.49915363151653863,
+          "std": 0.03195729641507073
+        },
+        "0.4": {
+          "mean": 0.36833180331461474,
+          "std": 0.04394897439439774
+        },
+        "0.45": {
+          "mean": 0.11999729724278607,
+          "std": 0.12275815915447255
+        },
+        "0.5": {
+          "mean": 0.007631385425910612,
+          "std": 0.02636893472462859
+        }
+      },
+      "mod_10hop_sigmoid": {
+        "0.3": {
+          "mean": 0.5296603190884863,
+          "std": 0.031128950304954252
+        },
+        "0.35": {
+          "mean": 0.4389812393626837,
+          "std": 0.03153530855753043
+        },
+        "0.4": {
+          "mean": 0.32393327011109047,
+          "std": 0.04387695856465362
+        },
+        "0.45": {
+          "mean": 0.2086730222163911,
+          "std": 0.03333532407633732
+        },
+        "0.5": {
+          "mean": 0.10892299846934388,
+          "std": 0.060305060825228206
+        }
+      }
+    },
+    "sv_analysis": {
+      "A_mh": {
+        "top5_sv": [
+          10712293.94230257,
+          1214077.7477067094,
+          978091.7861676272,
+          851442.1833546069,
+          760461.933896342
+        ],
+        "top5_eigcorr_with_labels": [
+          0.062002136031386344,
+          0.46533711536904465,
+          0.16378612907372658,
+          0.18499124608428552,
+          0.0011104809742646957
+        ]
+      },
+      "P_mh": {
+        "top5_sv": [
+          1.0850152181993302,
+          0.4450228967160021,
+          0.4381212481625667,
+          0.41018143646323196,
+          0.3902632357408277
+        ],
+        "top5_eigcorr_with_labels": [
+          0.003409488097421414,
+          0.1745003952413265,
+          0.020659858400767776,
+          0.09713296008135991,
+          0.575753847872741
+        ]
+      }
+    }
+  },
+  "figures_created": [
+    "analyses/iter-011/fig_degree_norm_ablation.png"
+  ],
+  "code_used": "\n# Key compute logic (see run_analysis.py for full)\nP = D_inv @ A_dense; P_mh = multihop(P, T=10)\nMsym = D_isqrt @ A_dense @ D_isqrt; Msym_mh = multihop(Msym, T=10)\nA_mh = multihop(A_dense, T=10)\n# NetMF log+clip:\nM = np.maximum(np.log(np.maximum(P_mh * (vol/d_j), 1e-300)), 0)\n# Post-hoc sym-norm then log:\nA_mh_sym_norm = A_mh / sqrt(outer(d,d)); M = max(log(A_mh_sym_norm), 0)\n# Row-norm then log:\nA_mh_row = A_mh / row_sums; M = max(log(A_mh_row * vol/d_j), 0)\n",
+  "shared_components": [
+    {
+      "name": "make_sbm_lcc",
+      "description": "SBM N=2000 cave=5.0 with LCC extraction, seeds 0..19",
+      "output_path": "analyses/iter-011/run_analysis.py",
+      "why_shared": "Same graph generation function used in all prior iters"
+    }
+  ],
+  "next_questions": [
+    "Does post-hoc symmetric degree normalization (A_degnorm_then_log_clip) recover any community structure, or is it identically NMI~0 like raw A?",
+    "If row-normalization rescues A^10hop, does it collapse to an equivalent of P=D^{-1}A (since P^T row-sums=1 by construction)?",
+    "What is the SV1/SV2 threshold below which community detection consistently works? All working methods appear to have sv1/sv2 < ~2, while failing raw A has sv1/sv2~163",
+    "Is norm_adj_netmf_clip0 or gradient-weight the better performing variant for a unified formulation?",
+    "Can we explain why mod_10hop_sigmoid works \u2014 is it also degree-normalizing implicitly via the B=A-dd^T/vol subtraction?"
+  ],
+  "failed_attempts": []
+}

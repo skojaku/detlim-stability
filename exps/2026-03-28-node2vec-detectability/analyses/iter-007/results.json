@@ -1,0 +1,293 @@
+{
+  "task": "Definitive confirmation of node2vec exceptionalism near SBM detectability limit. 5 methods (BP, node2vec, netmf_clipped, netmf_full, spectral), N=2000, cave=5, mu=[0.30,0.35,0.40,0.45,0.50,0.52], 30 samples (15 for BP). Plus mechanism figures: SV spectrum, eigvec-community alignment, NMI vs clip threshold.",
+  "method": "SBM N=2000, cave=5. node2vec: embcom.Node2Vec(num_walks=10, walk_length=80, window_length=10). netmf_clipped: NetMF log matrix, clip>=0, TruncatedSVD(64). netmf_full: same but no clip. spectral: eigsh(D^{-1/2}AD^{-1/2}), skip trivial. BP: belief_propagation.detect(A_full, q=2).",
+  "result_summary": "UNEXPECTED: BP performed poorly (NMI~0.04-0.08) due to iters=1 default not converging — likely needs multiple restarts. Among reliable methods: node2vec and netmf_clipped are nearly identical and both clearly outperform netmf_full (high variance) and spectral (near-zero). At mu=0.40: node2vec=0.346, netmf_clipped=0.365, netmf_full=0.320, spectral=0.017. SV1 ratio full/clipped=6.4x (1546 vs 242); clipped SV2 community alignment |corr|=0.65 vs full SV2=0.41. Clip threshold transition is sharp: NMI drops precipitously at clip>1.0.",
+  "key_numbers": {
+    "nmi_by_method_mu": {
+      "node2vec": {
+        "0.3": {
+          "mean": 0.5857953771729812,
+          "std": 0.03158638261570643,
+          "n": 30
+        },
+        "0.35": {
+          "mean": 0.47589281064484407,
+          "std": 0.03535326287551311,
+          "n": 30
+        },
+        "0.4": {
+          "mean": 0.3463138646867874,
+          "std": 0.03476843280146101,
+          "n": 30
+        },
+        "0.45": {
+          "mean": 0.1973285312549045,
+          "std": 0.06326976096302253,
+          "n": 30
+        },
+        "0.5": {
+          "mean": 0.06758499915650622,
+          "std": 0.047068409109485725,
+          "n": 30
+        },
+        "0.52": {
+          "mean": 0.030092448554272292,
+          "std": 0.029331557468838358,
+          "n": 30
+        }
+      },
+      "netmf_clipped": {
+        "0.3": {
+          "mean": 0.5982035732887313,
+          "std": 0.03143634368179394,
+          "n": 30
+        },
+        "0.35": {
+          "mean": 0.49254942207116953,
+          "std": 0.031374348916863436,
+          "n": 30
+        },
+        "0.4": {
+          "mean": 0.36497915331553243,
+          "std": 0.037828762289971986,
+          "n": 30
+        },
+        "0.45": {
+          "mean": 0.2106888840359571,
+          "std": 0.057007409482208365,
+          "n": 30
+        },
+        "0.5": {
+          "mean": 0.05952776982975519,
+          "std": 0.05160699752114838,
+          "n": 30
+        },
+        "0.52": {
+          "mean": 0.03592036257363551,
+          "std": 0.03174375601102001,
+          "n": 30
+        }
+      },
+      "netmf_full": {
+        "0.3": {
+          "mean": 0.5576559592644724,
+          "std": 0.151930182642262,
+          "n": 30
+        },
+        "0.35": {
+          "mean": 0.3677026248149506,
+          "std": 0.2224916883749605,
+          "n": 30
+        },
+        "0.4": {
+          "mean": 0.31973202818626556,
+          "std": 0.1298239398893147,
+          "n": 30
+        },
+        "0.45": {
+          "mean": 0.1956100919229776,
+          "std": 0.0936685378889103,
+          "n": 30
+        },
+        "0.5": {
+          "mean": 0.05038276394982681,
+          "std": 0.05542745006279494,
+          "n": 30
+        },
+        "0.52": {
+          "mean": 0.04409279212916772,
+          "std": 0.03631968077426919,
+          "n": 30
+        }
+      },
+      "spectral": {
+        "0.3": {
+          "mean": 0.18176791739203163,
+          "std": 0.1988867404787973,
+          "n": 30
+        },
+        "0.35": {
+          "mean": 0.0788768481970063,
+          "std": 0.10097024964590826,
+          "n": 30
+        },
+        "0.4": {
+          "mean": 0.017470774875426958,
+          "std": 0.02955863596747632,
+          "n": 30
+        },
+        "0.45": {
+          "mean": 0.008000764659232763,
+          "std": 0.011890596288175062,
+          "n": 30
+        },
+        "0.5": {
+          "mean": 0.005328402370173577,
+          "std": 0.00983458770935918,
+          "n": 30
+        },
+        "0.52": {
+          "mean": 0.0029594173232995943,
+          "std": 0.003713671945356882,
+          "n": 30
+        }
+      },
+      "bp": {
+        "0.3": {
+          "mean": 0.03981242428332301,
+          "std": 0.14854303118433115,
+          "n": 15
+        },
+        "0.35": {
+          "mean": 0.07098725834488752,
+          "std": 0.18024088812647734,
+          "n": 15
+        },
+        "0.4": {
+          "mean": 0.07863892903733195,
+          "std": 0.15742153749783097,
+          "n": 15
+        },
+        "0.45": {
+          "mean": 0.01797783451437441,
+          "std": 0.06637276794420223,
+          "n": 15
+        },
+        "0.5": {
+          "mean": 0.017911950995979205,
+          "std": 0.04513576351396604,
+          "n": 15
+        },
+        "0.52": {
+          "mean": 0.00748862368956163,
+          "std": 0.023109535265538564,
+          "n": 15
+        }
+      }
+    },
+    "singular_values_full_vs_clipped": {
+      "full": [
+        1546.0457437393136,
+        394.99258041275283,
+        307.2328253740883,
+        283.6608870655565,
+        278.45455956175454,
+        267.5913646108993,
+        265.17645527827483,
+        263.7233305789321,
+        251.45436227652092,
+        249.3909669135071,
+        243.72395808766393,
+        241.64713856140645,
+        235.54179668557148,
+        231.8590340897217,
+        222.96786768730166,
+        221.34766901220155,
+        218.68998010875555,
+        214.15176327080002,
+        211.1658644984783,
+        206.90672081346057
+      ],
+      "clipped": [
+        241.90054561167537,
+        117.61636792257693,
+        106.38388563367522,
+        102.31001114791482,
+        101.488986127442,
+        99.91844831586556,
+        98.68899658487423,
+        98.23291913761997,
+        97.06497053716859,
+        95.0109989984095,
+        94.41772378623268,
+        93.74379903122193,
+        93.19517398332755,
+        91.32718045066726,
+        91.04934823298669,
+        89.81023416893323,
+        89.03591259913358,
+        88.47401493565184,
+        85.95482114382371,
+        85.68378318729957
+      ]
+    },
+    "eigvec_community_corr": {
+      "full": [
+        0.02328884980982145,
+        0.4135206914362965,
+        0.02087123617424846,
+        0.29944663424104057,
+        0.030997028524205928
+      ],
+      "clipped": [
+        0.031900875886695004,
+        0.6497252047935007,
+        0.05098907895997897,
+        0.057353768725938295,
+        0.0619495936731566
+      ]
+    },
+    "nmi_vs_clip_threshold": {
+      "-5.0": 0.3350554481572442,
+      "-4.0": 0.3347946097713622,
+      "-3.0": 0.3360124419498032,
+      "-2.0": 0.3337792246958462,
+      "-1.0": 0.34645461850535875,
+      "0.0": 0.33733236364573294,
+      "0.5": 0.30715666850916123,
+      "1.0": 0.17697785162175972,
+      "1.5": 0.00668983330711138,
+      "2.0": 0.0027723763362857944
+    },
+    "nmi_vs_clip_threshold_std": {
+      "-5.0": 0.045994686159117,
+      "-4.0": 0.045535550494486744,
+      "-3.0": 0.046791859228843775,
+      "-2.0": 0.045898660564078736,
+      "-1.0": 0.035432178654890095,
+      "0.0": 0.04381154315566879,
+      "0.5": 0.05374661935634638,
+      "1.0": 0.12007950053175857,
+      "1.5": 0.005616690465127434,
+      "2.0": 0.0020589019305204564
+    },
+    "sv1_full_vs_clipped_ratio": 6.391245376606928,
+    "N": 2000,
+    "n_samples_main": 30,
+    "n_samples_bp": 15,
+    "mu_star": 0.553
+  },
+  "figures_created": [
+    "analyses/iter-007/fig_main_nmi_comparison.png",
+    "analyses/iter-007/fig_mechanism.png"
+  ],
+  "code_used": "def compute_netmf(A_lcc, window=10):\n    P = embcom_utils.to_trans_mat(A_lcc); P_d = P.toarray()\n    Ppow = sum(Pt for Pt in [P_d**i for i in 1..window]) / window\n    M_raw = Ppow @ diag(vol / d); return log(max(M_raw, 1e-300))\n\ndef embed_svd(M, dim=64, clip=None):\n    if clip is not None: M = max(M, clip)\n    return TruncatedSVD(n_components=dim).fit_transform(M)",
+  "shared_components": [
+    {
+      "name": "make_sbm",
+      "description": "SBM N=2000, returns full graph + LCC with labels",
+      "output_path": null,
+      "why_shared": "Same graph generation used across all methods"
+    },
+    {
+      "name": "compute_netmf",
+      "description": "NetMF log-PPR matrix, window=10, no clip",
+      "output_path": null,
+      "why_shared": "Core function for netmf_clipped and netmf_full; clipping applied downstream"
+    }
+  ],
+  "next_questions": [
+    "Does the SV1 gap between full and clipped NetMF persist for other window sizes (e.g., window=1, 5)?",
+    "Is the clipping effect also present in other graph models (e.g., LFR benchmarks)?",
+    "Why is BP the best method \u2014 what information does it use that embedding methods don't?",
+    "Can we quantify the effective 'implicit clipping' in SGNS by comparing the PMI values trained on?",
+    "Does node2vec's advantage over netmf_clipped (if any) come from the random walk sampling noise?"
+  ],
+  "failed_attempts": [
+    {
+      "approach": "belief_propagation.detect(A, q=2) with default iters=1 as 'best method'",
+      "why_failed": "BP with iters=1 frequently fails to find the community structure: NMI was 0.04-0.08 across all mu values (std 0.15-0.18), consistent with most runs outputting all-one-community. Only occasional lucky runs achieved high NMI. The result_summary claim that BP is best was incorrect — iters=1 is insufficient for this SBM regime.",
+      "lesson": "BP requires iters>1 (e.g., iters=10 or 100) and/or multiple random restarts to reliably converge. Do not use BP as a baseline without verifying convergence. With iters=1, node2vec/netmf_clipped are the best-performing reliable methods."
+    }
+  ]
+}

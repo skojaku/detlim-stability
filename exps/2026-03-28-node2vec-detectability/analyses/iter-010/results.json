@@ -1,0 +1,70 @@
+{
+  "task": "Test unified 3-step recipe (multi-hop + degree-normalize + log+clip) applied to each base operator (A, M_na, B, P) and compare to modularity-specific recipes and NetMF reference.",
+  "method": "SVD+KMeans on 8 matrix variants: Group A (unified PMI recipe on each operator) and Group B (modularity B multi-hop with raw/clip/sigmoid/gradweight). N=2000 SBM, mu=[0.30,0.40,0.45,0.50], 10 samples each.",
+  "result_summary": "randwalk_netmf_clip (standard NetMF) achieves NMI=0.341 at mu=0.40. adj_netmf_clip (same recipe on A instead of P) achieves 0.002. Best method is randwalk_netmf_clip with NMI=0.341. adj vs randwalk max_diff=18.0409 (sanity check for recipe equivalence). mod_10hop_sigmoid reaches 0.317.",
+  "key_numbers": {
+    "nmi_adj_netmf_clip_mu30": 0.002,
+    "nmi_adj_netmf_clip_mu40": 0.0016,
+    "nmi_adj_netmf_clip_mu45": 0.0007,
+    "nmi_adj_netmf_clip_mu50": 0.0011,
+    "nmi_randwalk_netmf_clip_mu30": 0.6061,
+    "nmi_randwalk_netmf_clip_mu40": 0.3414,
+    "nmi_randwalk_netmf_clip_mu45": 0.1785,
+    "nmi_randwalk_netmf_clip_mu50": 0.0806,
+    "nmi_norm_adj_netmf_clip_mu30": 0.6054,
+    "nmi_norm_adj_netmf_clip_mu40": 0.3407,
+    "nmi_norm_adj_netmf_clip_mu45": 0.1802,
+    "nmi_norm_adj_netmf_clip_mu50": 0.0862,
+    "nmi_mod_netmf_clip_mu30": 0.518,
+    "nmi_mod_netmf_clip_mu40": 0.2427,
+    "nmi_mod_netmf_clip_mu45": 0.1107,
+    "nmi_mod_netmf_clip_mu50": 0.0458,
+    "nmi_mod_10hop_raw_mu30": 0.5043,
+    "nmi_mod_10hop_raw_mu40": 0.184,
+    "nmi_mod_10hop_raw_mu45": 0.0709,
+    "nmi_mod_10hop_raw_mu50": 0.0312,
+    "nmi_mod_10hop_clip0_mu30": 0.217,
+    "nmi_mod_10hop_clip0_mu40": 0.0371,
+    "nmi_mod_10hop_clip0_mu45": 0.0197,
+    "nmi_mod_10hop_clip0_mu50": 0.0151,
+    "nmi_mod_10hop_sigmoid_mu30": 0.5477,
+    "nmi_mod_10hop_sigmoid_mu40": 0.3167,
+    "nmi_mod_10hop_sigmoid_mu45": 0.2109,
+    "nmi_mod_10hop_sigmoid_mu50": 0.0972,
+    "nmi_mod_10hop_gradweight_mu30": 0.0009,
+    "nmi_mod_10hop_gradweight_mu40": 0.0012,
+    "nmi_mod_10hop_gradweight_mu45": 0.0012,
+    "nmi_mod_10hop_gradweight_mu50": 0.0008,
+    "sv_ratio_adj_netmf_clip": 163.395,
+    "sv_ratio_randwalk_netmf_clip": 2.082,
+    "sv_ratio_norm_adj_netmf_clip": 2.249,
+    "sv_ratio_mod_netmf_clip": 366.243,
+    "sv_ratio_mod_10hop_raw": 1.281,
+    "sv_ratio_mod_10hop_clip0": 1.546,
+    "sv_ratio_mod_10hop_sigmoid": 2.919,
+    "sv_ratio_mod_10hop_gradweight": 1.011,
+    "adj_vs_randwalk_max_diff": 18.0409,
+    "best_method_mu40": "randwalk_netmf_clip",
+    "best_nmi_mu40": 0.3414,
+    "netmf_nmi_mu40": 0.3414
+  },
+  "figures_created": [
+    "analyses/iter-010/fig_unified_framework.png"
+  ],
+  "code_used": "\n# Core per-graph computation\ndef compute_methods(A_lcc):\n    d = np.array(A_lcc.sum(1)).flatten(); vol = d.sum()\n    A_dense = A_lcc.toarray().astype(float)\n    P = (A_dense.T / np.maximum(d, 1e-12)).T\n    d_inv_sqrt = 1.0 / np.maximum(np.sqrt(d), 1e-12)\n    M_na = d_inv_sqrt[:, None] * A_dense * d_inv_sqrt[None, :]\n    B = A_dense - np.outer(d, d) / vol\n    A_mh = multihop(A_dense, T=10)\n    adj_netmf_clip = degree_normalize_log_clip(A_mh, d, vol)\n    P_mh = multihop(P, T=10)\n    randwalk_netmf_clip = degree_normalize_log_clip(P_mh, d, vol)  # = standard NetMF\n    Mna_mh = multihop(M_na, T=10)\n    norm_adj_netmf_clip = degree_normalize_log_clip(Mna_mh, d, vol)\n    B_mh = multihop(B, T=10)\n    B_mh_pos = B_mh - B_mh.min()\n    mod_netmf_clip = np.maximum(np.log(np.maximum(B_mh_pos, 1e-300)), 0.0)\n    mod_10hop_sigmoid = sigmoid(B_mh)\n    ...\n",
+  "shared_components": [
+    {
+      "name": "make_sbm_lcc",
+      "description": "SBM graph generator with LCC extraction, N=2000, cave=5.0, corrected parameterization",
+      "output_path": "analyses/iter-010/run_analysis.py",
+      "why_shared": "Same SBM generation used across all iterations"
+    }
+  ],
+  "next_questions": [
+    "Does adj_netmf_clip == randwalk_netmf_clip? (sanity check: if not, the PMI recipe is NOT operator-invariant)",
+    "If the unified recipe on A and P give different results, what is the mathematical reason?",
+    "Can we combine the best modularity recipe with degree-normalization to close the gap to NetMF?",
+    "Is there a theoretical reason why the random walk P is the 'correct' operator for the log-PMI recipe?"
+  ],
+  "failed_attempts": []
+}

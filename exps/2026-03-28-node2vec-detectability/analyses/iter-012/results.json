@@ -1,0 +1,287 @@
+{
+  "task": "Window ablation for NetMF_clip0 (T=1..20) and Bethe Hessian (1-hop theoretically optimal) to test whether multi-hop aggregation is NECESSARY for community detection near the SBM detectability limit.",
+  "method": "NetMF clip0 with window T in {1,2,3,5,10,20}; Bethe Hessian H(r)=(r^2-1)I - rA + D with r=sqrt(cave) and r=sqrt(d_mean); KMeans on SVD/negative eigenvectors; N=2000, cave=5, 15 samples per (mu, T)",
+  "result_summary": "T=1 NMI at mu=0.40: 0.132\u00b10.078; T=10 NMI at mu=0.40: 0.359\u00b10.045. Bethe Hessian NMI at mu=0.40: 0.362\u00b10.035.",
+  "key_numbers": {
+    "nmi_T1_mu040": 0.1324968705835746,
+    "nmi_T2_mu040": 0.3504259832853448,
+    "nmi_T3_mu040": 0.38535527802738395,
+    "nmi_T5_mu040": 0.3784262429533076,
+    "nmi_T10_mu040": 0.3585107530195049,
+    "nmi_T20_mu040": 0.34332085834717857,
+    "nmi_BH_mu040": 0.36177982809290116,
+    "nmi_BH_swept_mu040": 0.3609365354320644,
+    "nmi_T1_mu030": 0.5404008084418673,
+    "nmi_T10_mu030": 0.6046703287979639,
+    "nmi_BH_mu030": 0.5902944774763467,
+    "nmi_T1_mu045": 0.04404541647341639,
+    "nmi_T10_mu045": 0.218186988381432,
+    "nmi_BH_mu045": 0.23709107854624237,
+    "nmi_T1_mu050": 0.014124082779593622,
+    "nmi_T10_mu050": 0.06853277047035028,
+    "nmi_BH_mu050": 0.09180177990943843,
+    "neg_eigval_count_mu040": 1.0,
+    "neg_eigval_count_mu050": 0.6
+  },
+  "nmi_vs_window": {
+    "1": {
+      "0.3": {
+        "mean": 0.5404008084418673,
+        "std": 0.03257647976082962
+      },
+      "0.4": {
+        "mean": 0.1324968705835746,
+        "std": 0.07790098260069021
+      },
+      "0.45": {
+        "mean": 0.04404541647341639,
+        "std": 0.03167246846818979
+      },
+      "0.5": {
+        "mean": 0.014124082779593622,
+        "std": 0.012928534190211253
+      }
+    },
+    "2": {
+      "0.3": {
+        "mean": 0.5966559538168319,
+        "std": 0.033975812184225206
+      },
+      "0.4": {
+        "mean": 0.3504259832853448,
+        "std": 0.05597633431022747
+      },
+      "0.45": {
+        "mean": 0.22813428694706755,
+        "std": 0.0516388074905403
+      },
+      "0.5": {
+        "mean": 0.05937701488765719,
+        "std": 0.057433915580738154
+      }
+    },
+    "3": {
+      "0.3": {
+        "mean": 0.6169721249590154,
+        "std": 0.030524306996167722
+      },
+      "0.4": {
+        "mean": 0.38535527802738395,
+        "std": 0.029193786130203184
+      },
+      "0.45": {
+        "mean": 0.23050997555459568,
+        "std": 0.07171823068760716
+      },
+      "0.5": {
+        "mean": 0.09965823902011255,
+        "std": 0.05694229592575128
+      }
+    },
+    "5": {
+      "0.3": {
+        "mean": 0.600702179457127,
+        "std": 0.026375213525299118
+      },
+      "0.4": {
+        "mean": 0.3784262429533076,
+        "std": 0.04293820409811406
+      },
+      "0.45": {
+        "mean": 0.23684761618507907,
+        "std": 0.05439991672705772
+      },
+      "0.5": {
+        "mean": 0.09241666424247612,
+        "std": 0.07180081280824308
+      }
+    },
+    "10": {
+      "0.3": {
+        "mean": 0.6046703287979639,
+        "std": 0.022869145711356596
+      },
+      "0.4": {
+        "mean": 0.3585107530195049,
+        "std": 0.04539075082782584
+      },
+      "0.45": {
+        "mean": 0.218186988381432,
+        "std": 0.043193280849238215
+      },
+      "0.5": {
+        "mean": 0.06853277047035028,
+        "std": 0.056334389478857945
+      }
+    },
+    "20": {
+      "0.3": {
+        "mean": 0.6065598129832728,
+        "std": 0.030705635073298133
+      },
+      "0.4": {
+        "mean": 0.34332085834717857,
+        "std": 0.02327807113822008
+      },
+      "0.45": {
+        "mean": 0.1881669579036021,
+        "std": 0.07978697771492424
+      },
+      "0.5": {
+        "mean": 0.06283935493884865,
+        "std": 0.04304764267985622
+      }
+    }
+  },
+  "nmi_bethe_hessian": {
+    "0.3": {
+      "mean": 0.5902944774763467,
+      "std": 0.034459167335125766,
+      "neg_eigval_count": 1.0666666666666667
+    },
+    "0.4": {
+      "mean": 0.36177982809290116,
+      "std": 0.03469892241371146,
+      "neg_eigval_count": 1.0
+    },
+    "0.45": {
+      "mean": 0.23709107854624237,
+      "std": 0.028336388061562495,
+      "neg_eigval_count": 1.0666666666666667
+    },
+    "0.5": {
+      "mean": 0.09180177990943843,
+      "std": 0.07656382434375644,
+      "neg_eigval_count": 0.6
+    }
+  },
+  "nmi_bethe_hessian_swept": {
+    "0.3": {
+      "mean": 0.5896954782982949,
+      "std": 0.03403528769923065
+    },
+    "0.4": {
+      "mean": 0.3609365354320644,
+      "std": 0.034269716313730096
+    },
+    "0.45": {
+      "mean": 0.23671279531064504,
+      "std": 0.02857264594783961
+    },
+    "0.5": {
+      "mean": 0.09226093122426274,
+      "std": 0.0770061249196467
+    }
+  },
+  "nmi_comparison": {
+    "netmf_T1": {
+      "0.3": {
+        "mean": 0.5404008084418673,
+        "std": 0.03257647976082962
+      },
+      "0.4": {
+        "mean": 0.1324968705835746,
+        "std": 0.07790098260069021
+      },
+      "0.45": {
+        "mean": 0.04404541647341639,
+        "std": 0.03167246846818979
+      },
+      "0.5": {
+        "mean": 0.014124082779593622,
+        "std": 0.012928534190211253
+      }
+    },
+    "netmf_T3": {
+      "0.3": {
+        "mean": 0.6169721249590154,
+        "std": 0.030524306996167722
+      },
+      "0.4": {
+        "mean": 0.38535527802738395,
+        "std": 0.029193786130203184
+      },
+      "0.45": {
+        "mean": 0.23050997555459568,
+        "std": 0.07171823068760716
+      },
+      "0.5": {
+        "mean": 0.09965823902011255,
+        "std": 0.05694229592575128
+      }
+    },
+    "netmf_T10": {
+      "0.3": {
+        "mean": 0.6046703287979639,
+        "std": 0.022869145711356596
+      },
+      "0.4": {
+        "mean": 0.3585107530195049,
+        "std": 0.04539075082782584
+      },
+      "0.45": {
+        "mean": 0.218186988381432,
+        "std": 0.043193280849238215
+      },
+      "0.5": {
+        "mean": 0.06853277047035028,
+        "std": 0.056334389478857945
+      }
+    },
+    "bethe_hessian": {
+      "0.3": {
+        "mean": 0.5902944774763467,
+        "std": 0.034459167335125766
+      },
+      "0.4": {
+        "mean": 0.36177982809290116,
+        "std": 0.03469892241371146
+      },
+      "0.45": {
+        "mean": 0.23709107854624237,
+        "std": 0.028336388061562495
+      },
+      "0.5": {
+        "mean": 0.09180177990943843,
+        "std": 0.07656382434375644
+      }
+    },
+    "bethe_hessian_swept": {
+      "0.3": {
+        "mean": 0.5896954782982949,
+        "std": 0.03403528769923065
+      },
+      "0.4": {
+        "mean": 0.3609365354320644,
+        "std": 0.034269716313730096
+      },
+      "0.45": {
+        "mean": 0.23671279531064504,
+        "std": 0.02857264594783961
+      },
+      "0.5": {
+        "mean": 0.09226093122426274,
+        "std": 0.0770061249196467
+      }
+    }
+  },
+  "figures_created": [
+    "analyses/iter-012/fig_multihop_necessity.png"
+  ],
+  "code_used": "\ndef compute_netmf_clip0_window(A_lcc, window=10):\n    P = embcom_utils.to_trans_mat(A_lcc).toarray().astype(np.float64)\n    Ppow = np.zeros_like(P)\n    Pt = np.eye(len(P))\n    for _ in range(window):\n        Pt = Pt @ P\n        Ppow += Pt\n    Ppow /= window\n    d = np.array(A_lcc.sum(1)).flatten()\n    vol = d.sum()\n    M = Ppow @ np.diag(vol / np.maximum(d, 1e-12))\n    return np.maximum(np.log(np.maximum(M, 1e-300)), 0)\n\ndef bethe_hessian_embed(A_lcc, labels, cave_param=5.0, use_lcc_degree=False):\n    n = A_lcc.shape[0]; d = np.array(A_lcc.sum(1)).flatten()\n    r = np.sqrt(d.mean()) if use_lcc_degree else np.sqrt(cave_param)\n    H = (r**2 - 1) * sp.eye(n) - r * A_lcc + sp.diags(d)\n    vals, vecs = eigsh(H, k=min(66, n-2), sigma=0, which='LM')\n    neg_idx = vals < -1e-8\n    if neg_idx.sum() == 0: return 0.0, 0\n    pred = KMeans(n_clusters=2, n_init=10).fit_predict(vecs[:, neg_idx])\n    return normalized_mutual_info_score(labels, pred), int(neg_idx.sum())\n",
+  "shared_components": [
+    {
+      "name": "make_sbm_lcc",
+      "description": "SBM generation with corrected parameterization: c_out=mu*cave, c_in=2*cave-c_out. Returns LCC adjacency + labels.",
+      "output_path": null,
+      "why_shared": "Standard SBM factory used in all iter-0xx analyses"
+    }
+  ],
+  "next_questions": [
+    "Does the Bethe Hessian outperform or match 10-hop NetMF? If so, multi-hop is NOT necessary \u2014 BH is the theoretically optimal 1-hop operator.",
+    "At what window T does NMI plateau? If plateau is at T=3-5, multi-hop helps but only marginally beyond a small number of hops.",
+    "How does neg_eigval_count change with mu? At mu>mu*, neg_eigval_count should drop to 0 \u2014 can this serve as a phase-transition detector?",
+    "Compare Bethe Hessian with node2vec (walk-based multi-hop) to see if BH matches the gold standard."
+  ],
+  "failed_attempts": []
+}

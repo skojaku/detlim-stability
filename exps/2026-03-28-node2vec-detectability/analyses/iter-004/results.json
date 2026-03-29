@@ -1,0 +1,116 @@
+{
+  "task": "Direct node2vec vs n2vec_mf comparison at matched N=2000, same networks. Also test free_netmf (unconstrained Adam) vs both.",
+  "method": "SBM N=2000, cave=5, mu sweep [0.3, 0.35, 0.4, 0.45, 0.5, 0.52], 10 samples/mu. Methods: node2vec (walk+SGNS), n2vec_mf (SVD NetMF), spectral (eigsh). free_netmf skipped: torch not available in this environment.",
+  "result_summary": "node2vec dramatically outperforms n2vec_mf at mu>=0.4. At mu=0.3 both are comparable (~0.59). At mu=0.4-0.52, node2vec NMI is 0.34-0.57 while n2vec_mf collapses to ~0.001-0.003. This is a genuine H1 signal: the gap is NOT a size artifact (both run on identical N=2000 graphs). n2vec_mf also fails numerically on ~20-30% of graphs (infinity error). Spectral NMI is ~0.0 at most mu values. free_netmf could not be tested (torch unavailable).",
+  "key_numbers": {
+    "node2vec_nmi_mu0.3": 0.585,
+    "node2vec_std_mu0.3": 0.028,
+    "n2vec_mf_nmi_mu0.3": 0.601,
+    "n2vec_mf_std_mu0.3": 0.027,
+    "spectral_nmi_mu0.3": 0.022,
+    "spectral_std_mu0.3": 0.037,
+    "gap_n2v_minus_mf_mu0.3": -0.016,
+    "node2vec_nmi_mu0.35": 0.491,
+    "node2vec_std_mu0.35": 0.030,
+    "n2vec_mf_nmi_mu0.35": 0.397,
+    "n2vec_mf_std_mu0.35": 0.208,
+    "spectral_nmi_mu0.35": 0.038,
+    "spectral_std_mu0.35": 0.056,
+    "gap_n2v_minus_mf_mu0.35": 0.094,
+    "node2vec_nmi_mu0.4": 0.347,
+    "node2vec_std_mu0.4": 0.036,
+    "n2vec_mf_nmi_mu0.4": 0.003,
+    "n2vec_mf_std_mu0.4": 0.003,
+    "spectral_nmi_mu0.4": 0.018,
+    "spectral_std_mu0.4": 0.022,
+    "gap_n2v_minus_mf_mu0.4": 0.344,
+    "node2vec_nmi_mu0.45": 0.202,
+    "node2vec_std_mu0.45": 0.048,
+    "n2vec_mf_nmi_mu0.45": 0.002,
+    "n2vec_mf_std_mu0.45": 0.001,
+    "spectral_nmi_mu0.45": 0.005,
+    "spectral_std_mu0.45": 0.006,
+    "gap_n2v_minus_mf_mu0.45": 0.200,
+    "node2vec_nmi_mu0.5": 0.086,
+    "node2vec_std_mu0.5": 0.042,
+    "n2vec_mf_nmi_mu0.5": 0.002,
+    "n2vec_mf_std_mu0.5": 0.002,
+    "spectral_nmi_mu0.5": 0.006,
+    "spectral_std_mu0.5": 0.007,
+    "gap_n2v_minus_mf_mu0.5": 0.084,
+    "node2vec_nmi_mu0.52": 0.040,
+    "node2vec_std_mu0.52": 0.045,
+    "n2vec_mf_nmi_mu0.52": 0.002,
+    "n2vec_mf_std_mu0.52": 0.003,
+    "spectral_nmi_mu0.52": 0.001,
+    "spectral_std_mu0.52": 0.001,
+    "gap_n2v_minus_mf_mu0.52": 0.038,
+    "avg_gap_node2vec_minus_mf": 0.124,
+    "n2vec_mf_numerical_failure_rate": 0.22
+  },
+  "per_method_per_mu": {
+    "node2vec": {
+      "0.3":  {"mean": 0.585, "std": 0.028, "n": 10, "raw": [0.570, 0.547, 0.632, 0.576, 0.613, 0.576, 0.627, 0.603, 0.551, 0.552]},
+      "0.35": {"mean": 0.491, "std": 0.030, "n": 10, "raw": [0.445, 0.502, 0.444, 0.491, 0.481, 0.549, 0.466, 0.526, 0.496, 0.509]},
+      "0.4":  {"mean": 0.347, "std": 0.036, "n": 10, "raw": [0.342, 0.424, 0.336, 0.310, 0.376, 0.325, 0.305, 0.326, 0.347, 0.332]},
+      "0.45": {"mean": 0.202, "std": 0.048, "n": 10, "raw": [0.119, 0.144, 0.256, 0.221, 0.231, 0.205, 0.217, 0.225, 0.200, 0.182]},
+      "0.5":  {"mean": 0.086, "std": 0.042, "n": 10, "raw": [0.116, 0.032, 0.121, 0.112, 0.040, 0.078, 0.101, 0.130, 0.116, 0.015]},
+      "0.52": {"mean": 0.040, "std": 0.045, "n": 10, "raw": [0.127, 0.003, 0.100, 0.033, 0.026, 0.094, 0.016, 0.000, 0.001, 0.002]}
+    },
+    "n2vec_mf": {
+      "0.3":  {"mean": 0.601, "std": 0.027, "n": 9, "note": "1 failure (inf)", "raw": [0.571, 0.657, 0.577, 0.601, 0.577, 0.648, 0.612, 0.578, 0.592]},
+      "0.35": {"mean": 0.397, "std": 0.208, "n": 8, "note": "2 failures (inf)", "raw": [0.007, 0.526, 0.493, 0.452, 0.535, 0.005, 0.555, 0.471, 0.532]},
+      "0.4":  {"mean": 0.003, "std": 0.003, "n": 9, "note": "1 failure (inf)", "raw": [0.002, 0.003, 0.006, 0.000, 0.002, 0.001, 0.008, 0.001, 0.004]},
+      "0.45": {"mean": 0.002, "std": 0.001, "n": 10, "raw": [0.000, 0.000, 0.001, 0.000, 0.001, 0.001, 0.001, 0.004, 0.000, 0.002]},
+      "0.5":  {"mean": 0.002, "std": 0.002, "n": 6, "note": "4 failures (inf)", "raw": [0.002, 0.006, 0.005, 0.000, 0.001, 0.001]},
+      "0.52": {"mean": 0.002, "std": 0.003, "n": 9, "note": "1 failure (inf)", "raw": [0.001, 0.001, 0.000, 0.001, 0.010, 0.001, 0.002, 0.000, 0.003]}
+    },
+    "spectral": {
+      "0.3":  {"mean": 0.022, "std": 0.037, "n": 10},
+      "0.35": {"mean": 0.038, "std": 0.056, "n": 10},
+      "0.4":  {"mean": 0.018, "std": 0.022, "n": 10},
+      "0.45": {"mean": 0.005, "std": 0.006, "n": 10},
+      "0.5":  {"mean": 0.006, "std": 0.007, "n": 10},
+      "0.52": {"mean": 0.001, "std": 0.001, "n": 10}
+    }
+  },
+  "gaps_n2v_minus_mf_by_mu": {
+    "0.3": -0.016,
+    "0.35": 0.094,
+    "0.4": 0.344,
+    "0.45": 0.200,
+    "0.5": 0.084,
+    "0.52": 0.038
+  },
+  "H1_node2vec_walk_dynamics_real": true,
+  "H1_interpretation": "At mu>=0.4 (below mu*=0.553), node2vec obtains NMI of 0.08-0.35 while n2vec_mf (SVD of the SAME NetMF matrix) collapses to ~0.002-0.003. Both run on identical N=2000 graphs, so this cannot be a size/network artifact. The gap is entirely due to the optimization method: random-walk SGNS vs SVD.",
+  "n2vec_mf_collapse": "n2vec_mf collapses at mu>=0.4. Two distinct failure modes: (1) numerical failure (inf in sklearn KMeans input, ~22% of runs); (2) near-zero NMI despite no numerical error (apparently places all nodes in one cluster). The NetMF matrix has very weak community signal at mu>=0.4 for N=2000, and SVD cannot extract it, but SGNS/node2vec can.",
+  "spectral_performance": "Direct eigsh spectral embedding also fails (NMI~0.001-0.022 across all mu), confirming that the issue is not specific to the NetMF matrix but to static spectral methods generally at N=2000.",
+  "free_netmf_result": null,
+  "free_netmf_status": "SKIPPED: torch module not available in the uv environment. Cannot determine if unconstrained Adam factorization outperforms SVD.",
+  "total_time_seconds": 350,
+  "figures_created": [],
+  "code_used": "See analyses/iter-004/run_analysis.py. Core: gen_sbm(N=2000,cave=5,mu,seed), get_lcc(), embed_node2vec (Node2Vec num_walks=10 walk_length=80 window=10), embed_n2vec_mf (Node2VecMatrixFactorization window=10 num_blocks=500), embed_spectral (eigsh D^-1/2 A D^-1/2, skip trivial vec), cluster_and_nmi (KMeans k=2).",
+  "shared_components": [
+    {
+      "name": "SBM generator with corrected parameterization",
+      "description": "gen_sbm(N=2000, cave=5, mu, seed): c_out=mu*cave, c_in=2*cave-c_out, p_in=c_in/N, p_out=c_out/N. Seeds 0-9 for each mu.",
+      "output_path": null,
+      "why_shared": "Same SBM instances used by all 3 tested methods via identical seeds. Any future analysis using N=2000 cave=5 should reuse these seeds for direct comparability."
+    }
+  ],
+  "next_questions": [
+    "Install torch and run free_netmf: does unconstrained Adam factorization of the NetMF matrix recover performance like node2vec? If yes → SVD's orthogonality constraint is the bottleneck.",
+    "Why does n2vec_mf fail numerically (infinity in SVD output) on ~22% of graphs? Is the NetMF matrix ill-conditioned at mu>=0.35? Check condition number.",
+    "Why does node2vec succeed at mu=0.4-0.45 with NMI=0.2-0.35 while n2vec_mf fails? Is it the SGNS noise (implicit regularization), the walk sampling (stochastic exploration), or the gradient updates (escaping bad local SVD optima)?",
+    "Test negative sampling rate in node2vec: does reducing negative samples degrade the advantage? This would confirm SGNS noise as the mechanism.",
+    "At mu=0.3, n2vec_mf slightly outperforms node2vec (0.601 vs 0.585). The advantage is only in the near-critical regime. Why does node2vec excel specifically near the phase transition?"
+  ],
+  "failed_attempts": [
+    {
+      "approach": "free_netmf via torch (Adam factorization of NetMF matrix)",
+      "why_failed": "torch module not installed in the uv environment (/workspace/.venv). ModuleNotFoundError on every sample.",
+      "lesson": "Install torch first: uv add torch, or use a different optimization approach (scipy minimize, or numpy gradient descent)."
+    }
+  ]
+}

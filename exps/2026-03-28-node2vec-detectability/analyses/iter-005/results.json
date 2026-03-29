@@ -1,0 +1,236 @@
+{
+  "task": "Test the masked/clipped NetMF hypothesis: does fixing -inf entries in the NetMF matrix by clipping at 0 rescue SVD near the SBM detectability limit? Compare n2vec_mf_full, netmf_clipped_svd, and node2vec at mu=[0.35,0.40,0.45,0.50], N=2000, 10 samples.",
+  "method": "Compute NetMF matrix (sum of walk transition powers / window), compare: (1) full log matrix SVD (embcom style), (2) max(log(M),0) sparse clipped matrix SVD (original NetMF paper), (3) walk-based node2vec. KMeans clustering, NMI evaluation.",
+  "result_summary": "Clipping at 0 significantly rescues SVD at mu=0.40: n2vec_mf_full=0.001 vs clipped=0.364 vs node2vec=0.353. At mu=0.45: full=0.003, clipped=0.221, node2vec=0.230.",
+  "key_numbers": {
+    "mu0.35_n2vec_mf_full_nmi": 0.24437473271786248,
+    "mu0.35_netmf_clipped_svd_nmi": 0.4851304728065089,
+    "mu0.35_node2vec_nmi": 0.4694257673109328,
+    "mu0.35_nan_rate": 0.0,
+    "mu0.35_clipped_sparsity": 0.8552485871846862,
+    "mu0.4_n2vec_mf_full_nmi": 0.0009449940827957516,
+    "mu0.4_netmf_clipped_svd_nmi": 0.3639345372909177,
+    "mu0.4_node2vec_nmi": 0.3534516168802877,
+    "mu0.4_nan_rate": 0.0,
+    "mu0.4_clipped_sparsity": 0.8553631185886035,
+    "mu0.45_n2vec_mf_full_nmi": 0.002960826298873348,
+    "mu0.45_netmf_clipped_svd_nmi": 0.22115047236512336,
+    "mu0.45_node2vec_nmi": 0.22952893501322907,
+    "mu0.45_nan_rate": 0.0,
+    "mu0.45_clipped_sparsity": 0.8553813484492105,
+    "mu0.5_n2vec_mf_full_nmi": 0.0006847315802511359,
+    "mu0.5_netmf_clipped_svd_nmi": 0.05955759785843316,
+    "mu0.5_node2vec_nmi": 0.05312175583162495,
+    "mu0.5_nan_rate": 0.0,
+    "mu0.5_clipped_sparsity": 0.856627937000502
+  },
+  "figures_created": [],
+  "code_used": "\n# Core analysis:\ndef compute_netmf_raw(A_lcc, window=10):\n    P = embcom_utils.to_trans_mat(A_lcc)\n    P_dense = P.toarray().astype(np.float64)\n    Ppow = zeros; Pt = eye\n    for _ in range(window): Pt = Pt @ P_dense; Ppow += Pt\n    Ppow /= window\n    d = A_lcc.sum(axis=1).flatten(); vol = d.sum()\n    return Ppow @ diag(vol / max(d, 1e-12))  # before log\n\ndef netmf_clipped(M_raw, k=1):\n    M_shift = log(max(M_raw/k, 1e-300))\n    M_shift[M_shift < 0] = 0  # clip to 0\n    return sp.csr_matrix(M_shift)  # sparse\n\n# Compare: SVD(log(M_raw)) vs SVD(clip(log(M_raw), 0)) vs node2vec walks\n",
+  "shared_components": [
+    {
+      "name": "sbm_generator",
+      "description": "SBM two-community graph generator with LCC extraction, N=2000, cave=5, correct parameterization: c_out=mu*cave, c_in=2*cave-c_out",
+      "output_path": null,
+      "why_shared": "Same graph generation code used across all iterations"
+    }
+  ],
+  "clipped_vs_node2vec_delta": {
+    "0.35": 0.01570470549557612,
+    "0.4": 0.010482920410629981,
+    "0.45": -0.008378462648105711,
+    "0.5": 0.0064358420268082125
+  },
+  "per_mu_details": {
+    "0.35": {
+      "n2vec_mf_full_nmi_mean": 0.24437473271786248,
+      "n2vec_mf_full_nmi_std": 0.23354813147449027,
+      "n2vec_mf_full_nan_rate_mean": 0.0,
+      "netmf_clipped_svd_nmi_mean": 0.4851304728065089,
+      "netmf_clipped_svd_nmi_std": 0.032159093582477344,
+      "clipped_sparsity_mean": 0.8552485871846862,
+      "node2vec_nmi_mean": 0.4694257673109328,
+      "node2vec_nmi_std": 0.035639756094879536,
+      "raw_n2vec_mf_full": [
+        0.4669751075010064,
+        0.012462712966459106,
+        0.010651283464616378,
+        0.4332149335834043,
+        0.0002487748500213274,
+        0.5246863372490425,
+        0.029410503418712944,
+        0.49608388614619575,
+        0.007069179198270489,
+        0.4629446088008958
+      ],
+      "raw_netmf_clipped_svd": [
+        0.4534562553744617,
+        0.5016320290928343,
+        0.5191919064410633,
+        0.41817170869260933,
+        0.5036415941019555,
+        0.5369656273224035,
+        0.4839701296514434,
+        0.4864084030718944,
+        0.46557916271623007,
+        0.4822879116001934
+      ],
+      "raw_node2vec": [
+        0.4458283170323704,
+        0.4928248393028738,
+        0.4826700314218012,
+        0.388296464664374,
+        0.49236217429044093,
+        0.5306931628896523,
+        0.47805512163048625,
+        0.46888068472200717,
+        0.44750703605764447,
+        0.4671398410976774
+      ]
+    },
+    "0.4": {
+      "n2vec_mf_full_nmi_mean": 0.0009449940827957516,
+      "n2vec_mf_full_nmi_std": 0.001079954909432504,
+      "n2vec_mf_full_nan_rate_mean": 0.0,
+      "netmf_clipped_svd_nmi_mean": 0.3639345372909177,
+      "netmf_clipped_svd_nmi_std": 0.027165285996514,
+      "clipped_sparsity_mean": 0.8553631185886035,
+      "node2vec_nmi_mean": 0.3534516168802877,
+      "node2vec_nmi_std": 0.03384888138672364,
+      "raw_n2vec_mf_full": [
+        0.0038841898161843,
+        0.0010034021461705074,
+        0.0007472029169182531,
+        0.0004102106895804795,
+        8.159375959126625e-07,
+        0.0002455251693693684,
+        0.0015892031412122094,
+        0.0006378265353382263,
+        4.9696879111851207e-05,
+        0.0008818675964764077
+      ],
+      "raw_netmf_clipped_svd": [
+        0.3283210151563577,
+        0.3300060790485753,
+        0.34792384726296255,
+        0.4043318035765548,
+        0.37696033180152466,
+        0.41293976189307824,
+        0.3434848073712425,
+        0.36276749994291796,
+        0.37221303283017465,
+        0.3603971940257884
+      ],
+      "raw_node2vec": [
+        0.27343789646388594,
+        0.3618494990019626,
+        0.3807901078712433,
+        0.37783397563191307,
+        0.3504478719230825,
+        0.4010231822700901,
+        0.3320301749925337,
+        0.3621833839738839,
+        0.32791702102971265,
+        0.36700305564456903
+      ]
+    },
+    "0.45": {
+      "n2vec_mf_full_nmi_mean": 0.002960826298873348,
+      "n2vec_mf_full_nmi_std": 0.0035826279051830215,
+      "n2vec_mf_full_nan_rate_mean": 0.0,
+      "netmf_clipped_svd_nmi_mean": 0.22115047236512336,
+      "netmf_clipped_svd_nmi_std": 0.08298279998983743,
+      "clipped_sparsity_mean": 0.8553813484492105,
+      "node2vec_nmi_mean": 0.22952893501322907,
+      "node2vec_nmi_std": 0.06871874680505895,
+      "raw_n2vec_mf_full": [
+        4.540533990303398e-05,
+        0.009137044331878078,
+        0.01045946036940667,
+        0.0009403974759183493,
+        0.003372323810045776,
+        0.00045623428718964514,
+        0.0009997120386570828,
+        0.00026190715009582257,
+        0.0010058757592139788,
+        0.0029299024264250444
+      ],
+      "raw_netmf_clipped_svd": [
+        0.18819051508949738,
+        0.34493780869099666,
+        0.09681391495444563,
+        0.3475323695262663,
+        0.21942674389140712,
+        0.16943849890092394,
+        0.27742548838157016,
+        0.2251200921160587,
+        0.24269547587957993,
+        0.09992381622048771
+      ],
+      "raw_node2vec": [
+        0.23703422295079102,
+        0.36145506391366644,
+        0.20048837537874337,
+        0.3034873103637167,
+        0.25234788141388353,
+        0.17416263157120943,
+        0.2507413520055744,
+        0.22028740373250288,
+        0.2020317552422687,
+        0.09325335355993387
+      ]
+    },
+    "0.5": {
+      "n2vec_mf_full_nmi_mean": 0.0006847315802511359,
+      "n2vec_mf_full_nmi_std": 0.0006035178674608892,
+      "n2vec_mf_full_nan_rate_mean": 0.0,
+      "netmf_clipped_svd_nmi_mean": 0.05955759785843316,
+      "netmf_clipped_svd_nmi_std": 0.05812513851438936,
+      "clipped_sparsity_mean": 0.856627937000502,
+      "node2vec_nmi_mean": 0.05312175583162495,
+      "node2vec_nmi_std": 0.044534274768638506,
+      "raw_n2vec_mf_full": [
+        0.001966027565212034,
+        0.0011388345694806645,
+        0.0009389775953294076,
+        6.404999376620263e-05,
+        5.08730646625496e-05,
+        9.915628495286707e-05,
+        0.001002395602924839,
+        0.00073684816267141,
+        3.6181065196984317e-10,
+        0.0008501526017007333
+      ],
+      "raw_netmf_clipped_svd": [
+        0.04782781926301931,
+        0.009543941488722922,
+        0.015141660040303618,
+        0.19986171162684582,
+        0.08376187454739026,
+        0.04070310127667933,
+        0.07008930561306212,
+        0.0038857546248935357,
+        0.11395945768775564,
+        0.010801352415659026
+      ],
+      "raw_node2vec": [
+        0.04300849229516835,
+        0.037208016118331536,
+        0.05966803369322255,
+        0.17241188116176576,
+        0.024318684147746628,
+        0.041410436924977374,
+        0.04278084595179611,
+        0.001686437683893278,
+        0.08158484488243563,
+        0.02713988545691224
+      ]
+    }
+  },
+  "next_questions": [
+    "Does the clipped NetMF still fall short of node2vec at mu=0.45-0.50, and if so, is the gap due to remaining noise in the sparse matrix or the walk sampling itself?",
+    "The original NetMF also subtracts log(k) for k negative samples (k=1 here). Does using k>1 help or hurt near the detectability limit?",
+    "If clipped NetMF approaches node2vec NMI, does the walk-based noise (sampling variance) in node2vec actually help by providing implicit regularization?",
+    "Can we directly measure what information node2vec's walk distribution captures that the clipped NetMF matrix loses (e.g., the positive entries in the clipped matrix vs the full walk co-occurrence support)?"
+  ],
+  "failed_attempts": []
+}
